@@ -11,13 +11,6 @@ bool visited[501][501];
 int dx[4] = { -1, 1, 0, 0 };
 int dy[4] = { 0, 0, -1, 1 };
 
-class pnt
-{
-public:
-	int x;
-	int y;
-};
-
 int DFS(int x, int y)
 {
 	if (x == M && y == N)
