@@ -38,15 +38,13 @@ void Union(int x, int y)
 	int a = Find(x);
 	int b = Find(y);
 
-	if (a == b) return;
-
 	if (noderank[a] < noderank[b])
 	{
 		parent[a] = b;
 	}
 	else if (noderank[a] == noderank[b])
 	{
-		if( a <= b )
+		if( a < b )
 		{
 			parent[b] = a;
 			noderank[a]++;

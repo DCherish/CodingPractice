@@ -39,8 +39,6 @@ int main()
 
 		if (info.count(s) != 0)
 		{
-			info[s]++;
-
 			answer.push_back(s);
 		}
 		else continue;
