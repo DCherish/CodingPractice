@@ -1,5 +1,5 @@
 #include <iostream>
-#include <queue>
+#include <stack>
 
 using namespace std ;
 
@@ -9,7 +9,7 @@ char matrix[101][101] ;
 bool visited[101][101] ;
 char newmatrix[101][101] ;
 
-void BFS(int u)
+void DFS(int u)
 {
 	for( int i = 1 ; i <= N ; i++ )
 	{
@@ -19,14 +19,14 @@ void BFS(int u)
 		}
 	}
 
-	queue <int> Q ;
+	stack <int> S ;
 
-	Q.push(u) ;
+	S.push(u) ;
 
-	while( !Q.empty() )
+	while( !S.empty() )
 	{
-		int visit = Q.front() ;
-		Q.pop() ;
+		int visit = S.top() ;
+		S.pop() ;
 
 		for( int i = 1 ; i <= N ; i++ )
 		{
@@ -34,7 +34,7 @@ void BFS(int u)
 			{
 				newmatrix[u][i] = '1' ;
 				visited[visit][i] = true ;
-				Q.push(i) ;
+				S.push(i) ;
 			}
 		}
 	}
@@ -62,7 +62,7 @@ int main()
 
 	for( int i = 1 ; i <= N ; i++ )
 	{
-		BFS(i) ;
+		DFS(i) ;
 	}
 
 	for( int i = 1 ; i <= N ; i++ )
