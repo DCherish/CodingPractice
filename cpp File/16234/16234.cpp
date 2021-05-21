@@ -30,10 +30,10 @@ bool calc(int xx, int yy, int x, int y)
 
 void BFS(int x, int y)
 {
-	visited[x][y] = true;
-
 	int sum = 0;
 	int cnt = 0;
+
+	visited[x][y] = true;
 
 	Q.push({ x, y });
 	Q_A.push({ x, y });
@@ -49,13 +49,13 @@ void BFS(int x, int y)
 
 		for (int i = 0; i < 4; i++)
 		{
-			int nx = x + dx[i];
-			int ny = y + dy[i];
+			int nx = qx + dx[i];
+			int ny = qy + dy[i];
 
 			if (nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
 			if (visited[nx][ny] == true) continue;
 
-			if (calc(nx, ny, x, y) == true)
+			if (calc(nx, ny, qx, qy) == true)
 			{
 				visited[nx][ny] = true;
 				Q.push({ nx, ny });
