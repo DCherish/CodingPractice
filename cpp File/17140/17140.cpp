@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int N;
+int r, c, k;
 
 int main()
 {
@@ -10,7 +10,7 @@ int main()
 	cin.tie(0);
 	cout.tie(0);
 
-	cin >> N;
+	cin >> r >> c >> k;
 
 	cout << N << "\n";
 
