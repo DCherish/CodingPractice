@@ -21,7 +21,5 @@ int main()
 		}
 	}
 
-	cout << N << "\n";
-
 	return 0;
 }
