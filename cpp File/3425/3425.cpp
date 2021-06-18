@@ -267,5 +267,7 @@ int main()
 		cout << answer[i] << "\n";
 	}
 
+	//cout << 0 << "\n";
+
 	return 0;
 }
