@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#define MAXVALUE 1000000000
 
 using namespace std;
 
@@ -12,9 +13,11 @@ vector<string> answer;
 
 void solve(int idx)
 {
-	deque<int> DQ;
+	deque<long long> DQ;
 
 	DQ.push_back(idx);
+
+	bool state = false;
 
 	for (int i = 0; i < cmd.size(); i++)
 	{
@@ -23,6 +26,7 @@ void solve(int idx)
 			if (DQ.empty() == true)
 			{
 				answer.push_back("ERROR");
+				state = true;
 				break;
 			}
 			else
@@ -35,11 +39,12 @@ void solve(int idx)
 			if (DQ.empty() == true)
 			{
 				answer.push_back("ERROR");
+				state = true;
 				break;
 			}
 			else
 			{
-				int d_front = DQ.front();
+				long long d_front = DQ.front();
 				DQ.pop_front();
 
 				d_front *= -1;
@@ -51,11 +56,12 @@ void solve(int idx)
 			if (DQ.empty() == true)
 			{
 				answer.push_back("ERROR");
+				state = true;
 				break;
 			}
 			else
 			{
-				int d_front = DQ.front();
+				long long d_front = DQ.front();
 				DQ.push_front(d_front);
 			}
 		}
@@ -64,14 +70,15 @@ void solve(int idx)
 			if (DQ.size() <= 1)
 			{
 				answer.push_back("ERROR");
+				state = true;
 				break;
 			}
 			else
 			{
-				int d_front = DQ.front();
+				long long d_front = DQ.front();
 				DQ.pop_front();
 
-				int d_next = DQ.front();
+				long long d_next = DQ.front();
 				DQ.pop_front();
 
 				DQ.push_front(d_front);
@@ -83,19 +90,26 @@ void solve(int idx)
 			if (DQ.size() <= 1)
 			{
 				answer.push_back("ERROR");
+				state = true;
 				break;
 			}
 			else
 			{
-				int d_front = DQ.front();
+				long long d_front = DQ.front();
 				DQ.pop_front();
 
-				int d_next = DQ.front();
+				long long d_next = DQ.front();
 				DQ.pop_front();
 
-				int d_add = d_front + d_next;
+				long long d_add = d_front + d_next;
 
-				DQ.push_front(d_add);
+				if (d_add > MAXVALUE)
+				{
+					answer.push_back("ERROR");
+					state = true;
+					break;
+				}
+				else DQ.push_front(d_add);
 			}
 		}
 		else if (cmd[i] == "SUB")
@@ -103,19 +117,26 @@ void solve(int idx)
 			if (DQ.size() <= 1)
 			{
 				answer.push_back("ERROR");
+				state = true;
 				break;
 			}
 			else
 			{
-				int d_front = DQ.front();
+				long long d_front = DQ.front();
 				DQ.pop_front();
 
-				int d_next = DQ.front();
+				long long d_next = DQ.front();
 				DQ.pop_front();
 
-				int d_sub = d_next - d_front;
+				long long d_sub = d_next - d_front;
 
-				DQ.push_front(d_sub);
+				if (abs(d_sub) > MAXVALUE)
+				{
+					answer.push_back("ERROR");
+					state = true;
+					break;
+				}
+				else DQ.push_front(d_sub);
 			}
 		}
 		else if (cmd[i] == "MUL")
@@ -123,19 +144,26 @@ void solve(int idx)
 			if (DQ.size() <= 1)
 			{
 				answer.push_back("ERROR");
+				state = true;
 				break;
 			}
 			else
 			{
-				int d_front = DQ.front();
+				long long d_front = DQ.front();
 				DQ.pop_front();
 
-				int d_next = DQ.front();
+				long long d_next = DQ.front();
 				DQ.pop_front();
 
-				int d_mul = d_front * d_next;
+				long long d_mul = d_front * d_next;
 
-				DQ.push_front(d_mul);
+				if (abs(d_mul) > MAXVALUE)
+				{
+					answer.push_back("ERROR");
+					state = true;
+					break;
+				}
+				else DQ.push_front(d_mul);
 			}
 		}
 		else if (cmd[i] == "DIV")
@@ -143,14 +171,15 @@ void solve(int idx)
 			if (DQ.size() <= 1 || DQ.front() == 0)
 			{
 				answer.push_back("ERROR");
+				state = true;
 				break;
 			}
 			else
 			{
-				int d_front = DQ.front();
+				long long d_front = DQ.front();
 				DQ.pop_front();
 
-				int d_next = DQ.front();
+				long long d_next = DQ.front();
 				DQ.pop_front();
 
 				int cnt = 0;
@@ -161,7 +190,7 @@ void solve(int idx)
 				d_front = abs(d_front);
 				d_next = abs(d_next);
 
-				int d_div = d_next / d_front;
+				long long d_div = d_next / d_front;
 
 				if (cnt == 1) d_div *= -1;
 
@@ -173,31 +202,38 @@ void solve(int idx)
 			if (DQ.size() <= 1 || DQ.front() == 0)
 			{
 				answer.push_back("ERROR");
+				state = true;
 				break;
 			}
 			else
 			{
-				int d_front = DQ.front();
+				long long d_front = DQ.front();
 				DQ.pop_front();
 
-				int d_next = DQ.front();
+				long long d_next = DQ.front();
 				DQ.pop_front();
+
+				bool op_state = true;
+
+				if (d_next < 0) op_state = false;
 
 				d_front = abs(d_front);
 				d_next = abs(d_next);
 
-				int d_mod = d_next % d_front;
+				long long d_mod = d_next % d_front;
 
-				if (d_next < 0) d_mod *= -1;
+				if (op_state == false) d_mod *= -1;
 
 				DQ.push_front(d_mod);
 			}
 		}
 		else
 		{
-			DQ.push_front(stoi(cmd[i]));
+			DQ.push_front(stoll(cmd[i]));
 		}
 	}
+
+	if (state == true) return;
 
 	if (DQ.size() != 1)
 	{
@@ -220,7 +256,6 @@ int main()
 	{
 		string str;
 
-		cin.ignore(256, '\n');
 		getline(cin, str);
 
 		if (str.compare("END") == 0)
@@ -238,7 +273,7 @@ int main()
 				solve(idx);
 			}
 
-			answer.push_back("\n");
+			answer.push_back("");
 
 			cmd.clear();
 		}
@@ -266,8 +301,6 @@ int main()
 	{
 		cout << answer[i] << "\n";
 	}
-
-	//cout << 0 << "\n";
 
 	return 0;
 }
