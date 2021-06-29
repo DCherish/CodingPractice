@@ -66,8 +66,6 @@ void setting()
 	MAP_Score[2][15] = 35;
 	MAP_Score[2][16] = 40;
 
-	//tt
-
 	MAP_Score[3][16] = 28;
 	MAP_Score[3][17] = 27;
 	MAP_Score[3][18] = 26;
