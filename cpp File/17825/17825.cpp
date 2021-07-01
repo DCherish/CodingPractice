@@ -306,5 +306,7 @@ int main(void)
 
 	cout << ans << "\n";
 
+	//cout << "\n";
+
 	return 0;
 }
