@@ -101,7 +101,7 @@ void mv(int idx, int color)
 				MAP[x + m_cnt][y][color] = MAP[x][y][color];
 				MAP[xx + m_cnt][yy][color] = MAP[xx][yy][color];
 
-				if (xx + m_cnt == x) MAP[x][y][color] = 0;
+				if (xx + m_cnt == x) MAP[xx][y][color] = 0;
 				else
 				{
 					MAP[x][y][color] = 0;
