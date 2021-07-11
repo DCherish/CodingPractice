@@ -73,5 +73,7 @@ int main()
 		cout << answer[i] << "\n";
 	}
 
+	//print("\n");
+
 	return 0;
 }
