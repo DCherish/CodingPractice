@@ -1,45 +1,38 @@
 #include <iostream>
 #include <algorithm>
-#define Max(a, b) (a > b ? a : b)
 
 using namespace std;
 
-int cnt = 1;
 int N;
-int arr[200000] = { 0, };
-int darr[200000] = { 0, };
-int maxcost = 0;
+int arr[501][501];
+int dp[501][501];
+
+int maxcost;
 
 void DP()
 {
-	darr[1] = arr[1];
+	dp[1][1] = arr[1][1];
+	maxcost = dp[1][1];
 
-	cnt = 1;
-
-	for (int i = 1; i < N; i++)
+	for (int i = 2; i <= N; i++)
 	{
-		for (int j = 0; j < i; j++)
+		for (int j = 1; j <= i; j++)
 		{
-			for (int k = 0; k < 2; k++)
+			dp[i][j] = arr[i][j] + max(dp[i - 1][j - 1], dp[i - 1][j]);
+
+			if (dp[i][j] > maxcost)
 			{
-				darr[cnt + i + k] = Max(darr[cnt + i + k], darr[cnt] + arr[cnt + i + k]);
-
-				if (darr[cnt + i + k] > maxcost)
-				{
-					maxcost = darr[cnt + i + k];
-				}
+				maxcost = dp[i][j];
 			}
-
-			cnt++;
 		}
 	}
 }
 
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 
 	cin >> N;
 
@@ -47,8 +40,7 @@ int main()
 	{
 		for (int j = 1; j <= i; j++)
 		{
-			cin >> arr[cnt];
-			cnt++;
+			cin >> arr[i][j];
 		}
 	}
 
