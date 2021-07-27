@@ -4,17 +4,17 @@
 using namespace std;
 
 int N, M;
-int tree[1000000];
-int maxlen;
-int ans;
+long long tree[1000000];
+long long maxlen;
+long long ans;
 
-bool is_valid(int len)
+bool is_valid(long long len)
 {
-	int sum = 0;
+	long long sum = 0;
 
 	for (int i = 0; i < N; i++)
 	{
-		int remain = tree[i] - len;
+		long long remain = tree[i] - len;
 
 		if (remain > 0)
 		{
@@ -42,12 +42,12 @@ int main()
 		maxlen = max(maxlen, tree[i]);
 	}
 
-	int start = 0;
-	int end = maxlen;
+	long long start = 0;
+	long long end = maxlen;
 
 	while (start <= end)
 	{
-		int mid = (start + end) / 2;
+		long long mid = (start + end) / 2;
 
 		if (is_valid(mid) == true)
 		{
