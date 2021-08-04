@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#define MOD 1000000007
 
 using namespace std;
 typedef long long ll;
@@ -21,41 +22,41 @@ vector<ll> ans;
 
 ll make_SegmentTree(int node, int start, int end)
 {
-	if (start == end) return tree[node] = vec[start];
+	if (start == end) return tree[node] = vec[start] % MOD;
 
 	int mid = (start + end) / 2;
 	ll left_result = make_SegmentTree(node * 2, start, mid);
 	ll right_result = make_SegmentTree(node * 2 + 1, mid + 1, end);
 
-	tree[node] = left_result + right_result;
+	tree[node] = (left_result * right_result) % MOD;
 
 	return tree[node];
 }
 
-ll sum(int node, int start, int end, int l, int r)
+ll mul(int node, int start, int end, int l, int r)
 {
-	if (l > end || r < start) return 0;
+	if (l > end || r < start) return 1;
 	if (l <= start && end <= r) return tree[node];
 
 	int mid = (start + end) / 2;
-	ll left_result = sum(node * 2, start, mid, l, r);
-	ll right_result = sum(node * 2 + 1, mid + 1, end, l, r);
+	ll left_result = mul(node * 2, start, mid, l, r);
+	ll right_result = mul(node * 2 + 1, mid + 1, end, l, r);
 
-	return left_result + right_result;
+	return (left_result * right_result) % MOD;
 }
 
-void update_SegmentTree(int node, int start, int end, int idx, ll diff)
+ll update(int node, int start, int end, int idx, ll value)
 {
-	if (idx < start || idx > end) return;
+	if (idx < start || idx > end) return tree[node];
+	if (start == end) return tree[node] = value;
 
-	tree[node] = tree[node] + diff;
+	int mid = (start + end) / 2;
+	ll left_result = update(node * 2, start, mid, idx, value);
+	ll right_result = update(node * 2 + 1, mid + 1, end, idx, value);
 
-	if (start != end)
-	{
-		int mid = (start + end) / 2;
-		update_SegmentTree(node * 2, start, mid, idx, diff);
-		update_SegmentTree(node * 2 + 1, mid + 1, end, idx, diff);
-	}
+	tree[node] = (left_result * right_result) % MOD;
+
+	return tree[node];
 }
 
 void solve()
@@ -73,18 +74,17 @@ void solve()
 		{
 			int idx = cmd[i].b - 1;
 			ll value = cmd[i].c;
-			ll diff = value - vec[idx];
 
-			vec[idx] = value;
-
-			update_SegmentTree(1, 0, N - 1, idx, diff);
+			update(1, 0, N - 1, idx, value);
 		}
 		else
 		{
 			int idx1 = cmd[i].b - 1;
 			int idx2 = cmd[i].c - 1;
 
-			ll result = sum(1, 0, N - 1, idx1, idx2);
+			ll result = mul(1, 0, N - 1, idx1, idx2);
+
+			result %= MOD;
 
 			ans.push_back(result);
 		}
