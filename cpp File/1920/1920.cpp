@@ -66,6 +66,8 @@ int main()
 		cin >> idx;
 
 		BinarySearch(idx);
+
+		cout << "\n";
 	}
 
 	for (int i = 0; i < answer.size(); i++)
