@@ -25,7 +25,7 @@ int main()
 	{
 		if (p_check[i] == false) continue;
 
-		for (int j = i + i; j <= N; j = j + i)
+		for (int j = i * i; j <= N; j = j + i)
 		{
 			p_check[j] = false;
 		}
