@@ -1,31 +1,12 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 #include <limits.h>
 
 using namespace std;
 
-struct info
-{
-	int x;
-	int y;
-};
-
-int N, r, c;
-
-vector<info> vec;
-
-long long ans = LLONG_MAX;
-
-void solve(int depth, int idx, long long score)
-{
-	if (idx < 0 || idx >= N) return;
-
-	if (depth == N)
-	{
-		ans = min(ans, score);
-	}
-}
+int N;
+int arr[501][2];
+int dp[501][501];
 
 int main()
 {
@@ -35,17 +16,25 @@ int main()
 
 	cin >> N;
 
-	for (int i = 0; i < N; i++)
+	for (int i = 1; i <= N; i++)
 	{
-		cin >> r >> c;
-
-		vec.push_back({r, c});
+		cin >> arr[i][0] >> arr[i][1];
 	}
 
-	for (int i = 0; i < N; i++)
+	for (int gap = 1; gap < N; gap++)
 	{
-		solve(0, i, 0);
+		for (int i = 1; i + gap <= N; i++)
+		{
+			dp[i][i + gap] = INT_MAX;
+
+			for (int j = i; j <= i + gap; j++)
+			{
+				dp[i][i + gap] = min(dp[i][i + gap], dp[i][j] + dp[j + 1][i + gap] + arr[i][0] * arr[j][1] * arr[i + gap][1]);
+			}
+		}
 	}
+
+	cout << dp[1][N] << "\n";
 
 	return 0;
 }
