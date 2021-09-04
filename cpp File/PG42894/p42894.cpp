@@ -1,304 +1,93 @@
-#include <iostream>
 #include <string>
 #include <vector>
-#include <cstring>
 
 using namespace std;
 
-int cnt;
 int N;
-int MAP[50][50];
-bool visited[201];
+int dx[5][6], dy[5][6];
 
-void removeMap(int x, int y, int idx)
+void pre_setting()
 {
-	if (idx == 1)
-	{
-		for (int i = x - 2; i <= x; i++)
-		{
-			for (int j = y; j <= y + 1; j++)
-			{
-				MAP[i][j] = -1;
-			}
-		}
-	}
-	else if (idx == 2)
-	{
-		for (int i = x; i <= x + 2; i++)
-		{
-			for (int j = y; j <= y + 1; j++)
-			{
-				MAP[i][j] = -1;
-			}
-		}
-	}
-	else if (idx == 3)
-	{
-		for (int i = x - 1; i <= x + 1; i++)
-		{
-			for (int j = y; j <= y + 1; j++)
-			{
-				MAP[i][j] = -1;
-			}
-		}
-	}
-	else if (idx == 4)
-	{
-		for (int i = x; i <= x + 1; i++)
-		{
-			for (int j = y; j <= y + 2; j++)
-			{
-				MAP[i][j] = -1;
-			}
-		}
-	}
-	else if (idx == 5)
-	{
-		for (int i = x - 1; i <= x; i++)
-		{
-			for (int j = y; j <= y + 2; j++)
-			{
-				MAP[i][j] = -1;
-			}
-		}
-	}
+	// 0 1 2 3 4 ; only 5 figure
+	// 0 1 2 3 ; color pnt // 4 5 ; black pnt
+
+	dx[0][0] = 0; dx[0][1] = 1; dx[0][2] = 1; dx[0][3] = 1; dx[0][4] = 0; dx[0][5] = 0;
+	dy[0][0] = 0; dy[0][1] = 0; dy[0][2] = 1; dy[0][3] = 2; dy[0][4] = 1; dy[0][5] = 2;
+
+	dx[1][0] = 0; dx[1][1] = 1; dx[1][2] = 2; dx[1][3] = 2; dx[1][4] = 0; dx[1][5] = 1;
+	dy[1][0] = 0; dy[1][1] = 0; dy[1][2] = 0; dy[1][3] = -1; dy[1][4] = -1; dy[1][5] = -1;
+
+	dx[2][0] = 0; dx[2][1] = 1; dx[2][2] = 2; dx[2][3] = 2; dx[2][4] = 0; dx[2][5] = 1;
+	dy[2][0] = 0; dy[2][1] = 0; dy[2][2] = 0; dy[2][3] = 1; dy[2][4] = 1; dy[2][5] = 1;
+
+	dx[3][0] = 0; dx[3][1] = 1; dx[3][2] = 1; dx[3][3] = 1; dx[3][4] = 0; dx[3][5] = 0;
+	dy[3][0] = 0; dy[3][1] = 0; dy[3][2] = -1; dy[3][3] = -2; dy[3][4] = -1; dy[3][5] = -2;
+
+	dx[4][0] = 0; dx[4][1] = dx[4][2] = dx[4][3] = 1; dx[4][4] = 0; dx[4][5] = 0;
+	dy[4][0] = 0; dy[4][1] = -1; dy[4][2] = 0; dy[4][3] = 1; dy[4][4] = -1; dy[4][5] = 1;
 }
 
-int check(int x, int y, int idx)
+int check(int x, int y, vector<vector<int>> board)
 {
-	if (x == 0)
-	{
-		if (y + 1 == N - 1)
-		{
-			if (MAP[x + 1][y] == -1 && MAP[x + 2][y] == -1) return 2;
-			else return -1;
-		}
-		else
-		{
-			if (MAP[x][y + 2] == idx)
-			{
-				if (MAP[x + 1][y] == -1 && MAP[x + 1][y + 1] == -1) return 4;
-				else return -1;
-			}
-			else
-			{
-				if (MAP[x + 1][y] == -1 && MAP[x + 2][y] == -1) return 2;
-				else return -1;
-			}
-		}
-	}
-	else if (x == 1)
-	{
-		if (y + 1 == N - 1)
-		{
-			if (MAP[x + 2][y + 1] == idx)
-			{
-				if (MAP[x + 1][y] == -1 && MAP[x + 2][y] == -1) return 2;
-				else return -1;
-			}
-			else
-			{
-				if (MAP[x - 1][y] == -1 && MAP[x + 1][y] == -1) return 3;
-				else return -1;
-			}
-		}
-		else
-		{
-			if (MAP[x][y + 2] == idx)
-			{
-				if (MAP[x + 1][y + 2] == idx)
-				{
-					if (MAP[x + 1][y] == -1 && MAP[x + 1][y + 1] == -1) return 4;
-					else return -1;
-				}
-				else
-				{
-					if (MAP[x - 1][y] == -1 && MAP[x - 1][y + 1] == -1) return 5;
-					else return -1;
-				}
-			}
-			else
-			{
-				if (MAP[x + 2][y + 1] == idx)
-				{
-					if (MAP[x + 1][y] == -1 && MAP[x + 2][y] == -1) return 4;
-					else return -1;
-				}
-				else
-				{
-					if (MAP[x - 1][y] == -1 && MAP[x + 1][y] == -1) return 3;
-					else return -1;
-				}
-			}
-		}
-	}
-	else if (x == N - 1)
-	{
-		if (y + 1 == N - 1)
-		{
-			if (MAP[x - 1][y] == -1 && MAP[x - 2][y] == -1) return 1;
-			else return -1;
-		}
-		else
-		{
-			if (MAP[x][y + 2] == idx)
-			{
-				if (MAP[x - 1][y] == -1 && MAP[x - 1][y + 1] == -1) return 5;
-				else return -1;
-			}
-			else
-			{
-				if (MAP[x - 1][y] == -1 && MAP[x - 2][y] == -1) return 1;
-				else return -1;
-			}
-		}
-	}
-	else if (x == N - 2)
-	{
-		if (y + 1 == N - 1)
-		{
-			if (MAP[x - 2][y + 1] == idx)
-			{
-				if (MAP[x - 1][y] == -1 && MAP[x - 2][y] == -1) return 1;
-				else return -1;
-			}
-			else
-			{
-				if (MAP[x - 1][y] == -1 && MAP[x + 1][y] == -1) return 3;
-				else return -1;
-			}
-		}
-		else
-		{
-			if (MAP[x][y + 2] == idx)
-			{
-				if (MAP[x - 1][y + 2] == idx)
-				{
-					if (MAP[x - 1][y] == -1 && MAP[x - 1][y + 1] == -1) return 5;
-					else return -1;
+	int value = board[x][y];
 
-				}
-				else
-				{
-					if (MAP[x + 1][y] == -1 && MAP[x + 1][y + 1] == -1) return 4;
-					else return -1;
-				}
-			}
-			else
-			{
-				if (MAP[x - 2][y + 1] == idx)
-				{
-					if (MAP[x - 1][y] == -1 && MAP[x - 2][y] == -1) return 1;
-					else return -1;
-				}
-				else
-				{
-					if (MAP[x - 1][y] == -1 && MAP[x + 1][y] == -1) return 3;
-					else return -1;
-				}
-			}
-		}
-	}
-	else
+	for (int i = 0; i < 5; i++) // 다섯개 중 해당하는지?
 	{
-		if (y + 1 == N - 1)
+		bool state = true;
+
+		for (int j = 0; j < 4; j++) // 좌표 비교
 		{
-			if (MAP[x - 2][y + 1] == idx)
+			int nx = x + dx[i][j];
+			int ny = y + dy[i][j];
+
+			if ((nx < 0 || ny < 0 || nx >= N || ny >= N) || board[nx][ny] != value)
 			{
-				if (MAP[x - 1][y] == -1 && MAP[x - 2][y] == -1) return 1;
-				else return -1;
-			}
-			else if (MAP[x + 2][y + 1] == idx)
-			{
-				if (MAP[x + 1][y] == -1 && MAP[x + 2][y] == -1) return 2;
-				else return -1;
-			}
-			else
-			{
-				if (MAP[x - 1][y] == -1 && MAP[x + 1][y] == -1) return 3;
-				else return -1;
+				state = false;
+				break;
 			}
 		}
-		else
+
+		if (state == true) // 해당하는 경우
 		{
-			if (MAP[x][y + 2] == idx)
+			bool state2 = true;
+
+			for (int j = 4; j < 6; j++)
 			{
-				if (MAP[x - 1][y + 2] == idx)
-				{
-					if (MAP[x - 1][y] == -1 && MAP[x - 1][y + 1] == -1) return 5;
-					else return -1;
+				int nx = x + dx[i][j];
+				int ny = y + dy[i][j];
 
-				}
-				else
+				if ((nx < 0 || ny < 0 || nx >= N || ny >= N) || board[nx][ny] != 0)
 				{
-					if (MAP[x + 1][y] == -1 && MAP[x + 1][y + 1] == -1) return 4;
-					else return -1;
+					state2 = false;
+					break;
 				}
-			}
-			else
-			{
-				if (MAP[x - 2][y + 1] == idx)
-				{
-					if (MAP[x - 1][y] == -1 && MAP[x - 2][y] == -1) return 1;
-					else return -1;
-				}
-				else if (MAP[x + 2][y + 1] == idx)
-				{
-					if (MAP[x + 1][y] == -1 && MAP[x + 2][y] == -1) return 2;
-					else return -1;
-				}
-				else
-				{
-					if (MAP[x - 1][y] == -1 && MAP[x + 1][y] == -1) return 3;
-					else return -1;
-				}
-			}
-		}
-	}
-}
 
-void findBlock()
-{
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			if (MAP[i][j] >= 1)
-			{
-				if (visited[MAP[i][j]] == false)
+				for (int k = nx; k >= 0; k--) // 해당좌표까지 가로막는 도형 있는지 check
 				{
-					visited[MAP[i][j]] = true;
-
-					int num = check(i, j, MAP[i][j]);
-
-					if (num != -1)
+					if (board[k][ny] != 0)
 					{
-						removeMap(i, j, num);
-						cnt++;
+						state2 = false;
+						break;
 					}
 				}
+
+				if (state2 == false) break;
 			}
+
+			if (state2 == true) return i;
 		}
 	}
+	return -1;
 }
 
-void fillMap()
+void removeBoard(int x, int y, int Idx, vector<vector<int>>& board)
 {
-	for (int j = 0; j < N; j++)
+	for (int i = 0; i < 4; i++)
 	{
-		int temp = 0;
+		int nx = x + dx[Idx][i];
+		int ny = y + dy[Idx][i];
 
-		for (int i = 0; i < N; i++)
-		{
-			temp = i;
-
-			if (MAP[i][j] != 0) break;
-		}
-
-		for (int i = 0; i < temp; i++)
-		{
-			MAP[i][j] = -1;
-		}
+		board[nx][ny] = 0;
 	}
 }
 
@@ -306,53 +95,25 @@ int solution(vector<vector<int>> board)
 {
 	int answer = 0;
 
-	memset(visited, false, sizeof(visited));
-
+	pre_setting();
 	N = board.size();
 
 	for (int i = 0; i < N; i++)
 	{
 		for (int j = 0; j < N; j++)
 		{
-			MAP[i][j] = board[i][j];
+			if (board[i][j] == 0) continue;
+
+			int result = check(i, j, board);
+
+			if (result != -1)
+			{
+				removeBoard(i, j, result, board);
+				answer++;
+				j = -1;
+			}
 		}
 	}
 
-	fillMap();
-	findBlock();
-
-	answer = cnt;
-
 	return answer;
-}
-
-int main()
-{
-	ios_base::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
-	vector<vector<int>> board;
-
-	board.resize(10);
-
-	for (int i = 0; i < board.size(); i++)
-	{
-		board[i].resize(10);
-	}
-
-	board = {{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,4,0,0,0},
-			{0,0,0,0,0,4,4,0,0,0},
-			{0,0,0,0,3,0,4,0,0,0},
-			{0,0,0,2,3,0,0,0,5,5},
-			{1,2,2,2,3,3,0,0,0,5},
-			{1,1,1,0,0,0,0,0,0,5}};
-
-	cout << solution(board) << "\n";
-
-	return 0;
 }
