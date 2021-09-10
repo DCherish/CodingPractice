@@ -40,7 +40,7 @@ int solution(vector<string> lines) {
 
         for (int j = i + 1; j < vec.size(); j++)
         {
-            if (tempS + 1 >= vec[j].start || tempE + 1 > vec[j].start)
+            if (tempS + 1 > vec[j].start || tempE + 1 > vec[j].start)
             {
                 cnt++;
             }
