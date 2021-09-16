@@ -21,7 +21,6 @@ int temp, dtemp;
 bool cmp(info i1, info i2)
 {
 	return i1.left < i2.left;
-
 }
 
 int main()

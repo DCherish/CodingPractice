@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 #include <vector>
 #include <sstream>
@@ -191,39 +190,4 @@ vector<int> solution(vector<string> info, vector<string> query) {
     }
 
     return answer;
-}
-
-int main()
-{
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-
-    vector<string> info;
-    vector<string> query;
-
-    info.push_back("java backend junior pizza 150");
-    info.push_back("python frontend senior chicken 210");
-    info.push_back("python frontend senior chicken 150");
-    info.push_back("cpp backend senior pizza 260");
-    info.push_back("java backend junior chicken 80");
-    info.push_back("python backend senior chicken 50");
-
-    query.push_back("java and backend and junior and pizza 100");
-    query.push_back("python and frontend and senior and chicken 200");
-    query.push_back("cpp and - and senior and pizza 250");
-    query.push_back("- and backend and senior and - 150");
-    query.push_back("- and - and - and chicken 100");
-    query.push_back("- and - and - and - 150");
-
-    vector<int> answer = solution(info, query);
-
-    for (int i = 0; i < answer.size(); i++)
-    {
-        cout << answer[i] << " ";
-    }
-
-    cout << "\n";
-
-    return 0;
 }
