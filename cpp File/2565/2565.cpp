@@ -14,7 +14,6 @@ int N, A, B;
 vector<info> vec;
 int arr[100];
 int dp[100];
-int idx = 0;
 int maxcnt = 0;
 int temp, dtemp;
 
@@ -38,11 +37,10 @@ int main()
 
 	for (int i = 0; i < vec.size(); i++)
 	{
-		arr[idx] = vec[i].right;
-		idx++;
+		arr[i] = vec[i].right;
 	}
 
-	for (int i = 0; i < idx; i++)
+	for (int i = 0; i < N; i++)
 	{
 		dp[i] = 1;
 	}
