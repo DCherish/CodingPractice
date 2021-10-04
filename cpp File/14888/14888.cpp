@@ -17,6 +17,8 @@ void DFS(int p, int m, int t, int d, int cnt, int sum)
 	{
 		max_answer = max(max_answer, sum);
 		min_answer = min(min_answer, sum);
+
+		return;
 	}
 
 	if (p > 0)

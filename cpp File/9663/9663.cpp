@@ -1,65 +1,61 @@
 #include <iostream>
 
-using namespace std ;
+using namespace std;
+typedef long long ll;
 
-bool matrix[15][15] = { false, } ;
+int N, ans;
+int col[15];
 
-int N ;
-int answer = 0 ;
-
-bool IsVaild(int a, int b)
+bool check(int r1, int c1, int r2, int c2)
 {
-	int i, j ;
-
-	for( i = 0 ; i < b ; i++ )
-	{
-		if( matrix[a][i] == true ) return false ;
-	}
-
-	for( i = 0 ; i < a ; i++ )
-	{
-		if( matrix[i][b] == true ) return false ;
-	}
-
-	for( i = a-1, j = b-1 ; i >= 0 && j >= 0 ; i--, j-- )
-	{
-		if( matrix[i][j] == true ) return false ;
-	}
-
-	for( i = a+1, j = b-1 ; i < N && j >= 0 ; i++, j-- )
-	{
-		if( matrix[i][j] == true ) return false ;
-	}
-
-	return true ;
+	if (c1 == c2) return true;
+	if (r1 - c1 == r2 - c2) return true;
+	if (r1 + c1 == r2 + c2) return true;
+	return false;
 }
 
-void NQueen(int cnt)
+void solve(int row)
 {
-	if( cnt == N )
+	if (row == N + 1)
 	{
-		answer++ ;
-		return ;
+		ans++;
 	}
-
-	for( int i = 0 ; i < N ; i++ )
+	else
 	{
-		if( matrix[i][cnt] != true && IsVaild(i, cnt) == true )
+		for (int c = 1; c <= N; c++)
 		{
-			matrix[i][cnt] = true ;
-			NQueen(cnt+1) ;
-			matrix[i][cnt] = false ;
+			bool possible = true;
+
+			for (int i = 1; i <= row - 1; i++)
+			{
+				if (check(row, c, i, col[i]) == true)
+				{
+					possible = false;
+					break;
+				}
+			}
+
+			if (possible == true)
+			{
+				col[row] = c;
+				solve(row + 1);
+				col[row] = 0;
+			}
 		}
 	}
 }
 
 int main()
 {
-	cin >> N ;
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 
-	NQueen(0) ;
+	cin >> N;
 
-	cout << answer << endl ;
+	solve(1);
 
-	return 0 ;
+	cout << ans << "\n";
+
+	return 0;
 }
