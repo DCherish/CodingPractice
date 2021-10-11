@@ -14,7 +14,7 @@ int main()
 	cin.tie(0);
 	cout.tie(0);
 
-	fill(dp, dp + 5000, -1);
+	fill(dp, dp + 5001, -1);
 
 	cin >> N;
 

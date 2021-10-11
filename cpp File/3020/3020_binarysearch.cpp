@@ -32,7 +32,7 @@ int main()
 	{
 		int temp = bottom.size() - (lower_bound(bottom.begin(), bottom.end(), i) - bottom.begin());
 
-		temp += top.size() - (lower_bound(top.begin(), top.end(), H - i + 1) - top.begin());
+		temp += top.size() - (upper_bound(top.begin(), top.end(), H - i) - top.begin());
 
 		if (result == temp) cnt++;
 		else if (result > temp)

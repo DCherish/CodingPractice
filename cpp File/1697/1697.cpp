@@ -1,93 +1,82 @@
 #include <iostream>
 #include <queue>
 
-using namespace std ;
+using namespace std;
 
-int N = 0 ;
-int K = 0 ;
+int N = 0;
+int K = 0;
 
-bool state = false ;
+bool state = false;
 
-bool visited[100000] = { false, } ; // All initialize
+bool visited[100000];
 
 class value
 {
-public :
-	int num ;
-	int cnt ;
+public:
+	int num;
+	int cnt;
 };
 
 int main()
 {
-	for(;;)
+	cin >> N >> K;
+
+	queue<value> Q;
+
+	value v;
+
+	visited[N] = true;
+	v.num = N;
+	v.cnt = 0;
+
+	Q.push(v);
+
+	while (!Q.empty())
 	{
-		cin >> N >> K ;
+		int vs = Q.front().num;
+		int nc = Q.front().cnt;
 
-		if( N < 0 || K < 0 || N > 100000 || K > 100000 ) continue ;
+		Q.pop();
 
-		queue <value> Q ;
-
-		value v ;
-
-		visited[N] = true ;
-		v.num = N ;
-		v.cnt = 0 ;
-
-		Q.push(v) ;
-
-		while( !Q.empty() )
+		if (vs == K)
 		{
-			int vs = Q.front().num ;
-			int nc = Q.front().cnt ;
-
-			Q.pop() ;
-
-			if( vs == K )
-			{
-				cout << nc << endl ;
-				state = true ;
-				break ;
-			}
-
-			if( vs-1 >= 0 && visited[vs-1] == false )
-			{
-				visited[vs-1] = true ;
-
-				value pv ;
-
-				pv.num = vs - 1 ;
-				pv.cnt = nc + 1 ;
-				Q.push(pv) ;
-			}
-
-			if( vs+1 <= 100000 && visited[vs+1] == false )
-			{
-				visited[vs+1] = true ;
-				
-				value pv ;
-
-				pv.num = vs + 1 ;
-				pv.cnt = nc + 1 ;
-				Q.push(pv) ;
-			}
-
-			if( 2*vs <= 100000 && visited[2*vs] == false )
-			{
-				visited[2*vs] = true ;
-				
-				value pv ;
-
-				pv.num = 2 * vs ;
-				pv.cnt = nc + 1 ;
-				Q.push(pv) ;
-			}
+			cout << nc << "\n";
+			break;
 		}
 
-		if( state == true )
+		if (vs - 1 >= 0 && visited[vs - 1] == false)
 		{
-			break ;
+			visited[vs - 1] = true;
+
+			value pv;
+
+			pv.num = vs - 1;
+			pv.cnt = nc + 1;
+			Q.push(pv);
+		}
+
+		if (vs + 1 <= 100000 && visited[vs + 1] == false)
+		{
+			visited[vs + 1] = true;
+
+			value pv;
+
+			pv.num = vs + 1;
+			pv.cnt = nc + 1;
+			Q.push(pv);
+		}
+
+		if (2 * vs <= 100000 && visited[2 * vs] == false)
+		{
+			visited[2 * vs] = true;
+
+			value pv;
+
+			pv.num = 2 * vs;
+			pv.cnt = nc + 1;
+			Q.push(pv);
 		}
 	}
 
-	return 0 ;
+	return 0;
 }

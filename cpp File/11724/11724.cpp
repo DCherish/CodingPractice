@@ -1,102 +1,65 @@
 #include <iostream>
 #include <queue>
 
-using namespace std ;
+using namespace std;
 
-int N ;
-int M ;
+int N, M, cnt;
 
-int cnt = 0 ;
+int matrix[1000][1000];
+bool visited[1000];
 
-int matrix[1000][1000] = { 0, } ;
-bool visited[1000] = { false, } ;
-
-void BFS()
+void BFS(int idx)
 {
-	for( int i = 0 ; i < N ; i++ )
+	queue<int> Q;
+
+	Q.push(idx);
+
+	while (!Q.empty())
 	{
-		for( int j = 0 ; j < N ; j++ )
+		int visit = Q.front();
+		Q.pop();
+
+		for (int k = 0; k < N; k++)
 		{
-			if( matrix[i][j] == 1 && visited[j] == false )
+			if (matrix[visit][k] == 1 && visited[k] == false)
 			{
-				visited[j] = true ;
-
-				queue <int> Q ;
-
-				Q.push(j) ;
-
-				while( !Q.empty() )
-				{
-					int visit = Q.front() ;
-					Q.pop() ;
-
-					for( int k = 0 ; k < N ; k++ )
-					{
-						if( matrix[visit][k] == 1 && visited[k] == false ) 
-						{
-							visited[k] = true ;
-
-							Q.push(k) ;
-						}
-					}
-				}
-
-				cnt++ ;
+				visited[k] = true;
+				Q.push(k);
 			}
-		}
-	}
-
-}
-
-void Isthereanymore()
-{
-	for( int i = 0 ; i < N ; i++ )
-	{
-		int tcnt = 0 ;
-		bool state = false ;
-
-		for( int j = 0 ; j < N ; j++ )
-		{
-			if( matrix[i][j] == 1 ) 
-			{
-				break ;
-			}
-
-			tcnt++ ;
-
-			if( tcnt == N ) cnt++ ;
 		}
 	}
 }
 
 int main()
 {
-	int u = 0 ;
-	int v = 0 ;
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 
-	cin >> N >> M ;
+	int u = 0;
+	int v = 0;
 
-	if( N < 1 || N > 1000 || M < 0 || M > N*(N-1)/2 ) return 0 ;
+	cin >> N >> M;
 
-	for( int i = 0 ; i < M ; i++ )
+	for (int i = 0; i < M; i++)
 	{
-		cin >> u >> v ;
+		cin >> u >> v;
 
-		if( u < 1 || v < 1 || u > N || v > N || u == v )
-		{
-			i-- ;
-			continue ;
-		}
-
-		matrix[u-1][v-1] = 1 ;
-		matrix[v-1][u-1] = 1 ;
+		matrix[u - 1][v - 1] = 1;
+		matrix[v - 1][u - 1] = 1;
 	}
 
-	BFS() ;
+	for (int i = 0; i < N; i++)
+	{
+		if (!visited[i])
+		{
+			visited[i] = true;
+			BFS(i);
+			cnt++;
+		}
+	}
 
-	Isthereanymore() ;
+	cout << cnt << "\n";
 
-	cout << cnt << endl ;
-
-	return 0 ;
+	return 0;
 }

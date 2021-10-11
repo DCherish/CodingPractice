@@ -1,112 +1,79 @@
 #include <iostream>
 #include <queue>
+#include <algorithm>
+#include <limits.h>
 
-using namespace std ;
+using namespace std;
 
-int N = 0 ;
-int M = 0 ;
-
-int dx[4] = {-1, 0, 0, 1} ;
-int dy[4] = {0, -1, 1, 0} ;
-
-class pnt
+struct pnt
 {
-public:
 	int x;
 	int y;
 	int cnt;
 };
 
-void SearchEND(char **matrix, bool **visited)
+int N, M, result = INT_MAX;
+
+char MAP[100][100];
+bool visited[100][100];
+
+int dx[4] = { -1, 1, 0, 0 };
+int dy[4] = { 0, 0, -1, 1 };
+
+queue<pnt> Q;
+
+void BFS(int x, int y)
 {
-	queue <pnt> Q ;
-	pnt p ;
-	int min = 9999 ;
+	visited[x][y] = true;
+	Q.push({ x, y, 1 });
 
-	p.x = 0 ;
-	p.y = 0 ;
-	p.cnt = 0 ;
-
-	visited[p.x][p.y] = true ;
-	p.cnt = 1 ;
-	
-	Q.push(p) ;
-
-	while( !Q.empty() )
+	while (!Q.empty())
 	{
-		int vx = Q.front().x ;
-		int vy = Q.front().y ;
-		int nc = Q.front().cnt ;
+		int qx = Q.front().x;
+		int qy = Q.front().y;
+		int qcnt = Q.front().cnt;
+		Q.pop();
 
-		Q.pop() ;
-
-		for( int i = 0 ; i < 4 ; i++ )
+		if (qx == N - 1 && qy == M - 1)
 		{
-			int nx = vx + dx[i] ;
-			int ny = vy + dy[i] ;
+			result = min(result, qcnt);
+			continue;
+		}
 
-			if( nx < 0 || ny < 0 || nx >= N || ny >= M ) continue ;
+		for (int i = 0; i < 4; i++)
+		{
+			int nx = qx + dx[i];
+			int ny = qy + dy[i];
 
-			if( nx == N - 1 && ny == M - 1 )
-			{
-				if( min > nc + 1 )
-				{
-					min = nc + 1  ;
-				}
-				continue ;
-			}
+			if (nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
+			if (MAP[nx][ny] == '0' || visited[nx][ny]) continue;
 
-			if( matrix[nx][ny] == '0' )	continue ;
-			if( visited[nx][ny] == true ) continue ;
-			
-			visited[nx][ny] = true ;
-
-			pnt np ;
-			np.x = nx ;
-			np.y = ny ;
-			np.cnt = nc + 1 ;
-
-			Q.push(np) ;
+			visited[nx][ny] = true;
+			Q.push({ nx, ny, qcnt + 1 });
 		}
 	}
-
-	cout << min << endl ;
 }
 
 int main()
 {
-	for(;;)
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	cin >> N >> M;
+
+	for (int i = 0; i < N; i++)
 	{
-		cin >> N >> M ;
-
-		if( N < 2 || N > 100 || M < 2 || M > 100 )
+		for (int j = 0; j < M; j++)
 		{
-			continue ;
-		}else
-		{
-			char **matrix = new char *[N] ;
-			bool **visited = new bool *[N] ;
-
-			for( int i = 0 ; i < N ; i++ )
-			{
-				matrix[i] = new char[M] ;
-				visited[i] = new bool[M] ;
-			}
-
-			for( int i = 0 ; i < N ; i++ )
-			{
-				for( int j = 0 ; j < M ; j++ )
-				{
-					cin >> matrix[i][j] ;
-					visited[i][j] = false ;
-				}
-			}
-
-			SearchEND(matrix, visited) ;
-
-			break ;
+			cin >> MAP[i][j];
+			visited[i][j] = false;
 		}
 	}
 
-	return 0 ;
+	BFS(0, 0);
+
+	cout << result << "\n";
+
+	return 0;
 }

@@ -1,84 +1,63 @@
 #include <iostream>
+#include <algorithm>
+#include <limits.h>
 
-using namespace std ;
+using namespace std;
 
-int C, R ; // C ; Column, R ; Row
+int R, C, cnt;
+char MAP[50][50];
+
+void check(int x, int y)
+{
+	int tempcnt = 0;
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			if ((i + j) % 2 != 0)
+			{
+				if (MAP[x][y] == MAP[x + i][y + j]) tempcnt++;
+			}
+			else
+			{
+				if (MAP[x][y] != MAP[x + i][y + j]) tempcnt++;
+			}
+		}
+	}
+
+	if (tempcnt > 32) tempcnt = 64 - tempcnt;
+
+	cnt = min(cnt, tempcnt);
+}
 
 int main()
 {
-	for(;;)
-	{
-		cin >> R >> C ;
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 
-		if( R < 8 || R > 50 || C < 8 || C > 50 )
+	cin >> R >> C;
+
+	for (int i = 0; i < R; i++)
+	{
+		for (int j = 0; j < C; j++)
 		{
-			//cout << "Setting Error :(\n Plz Re-insert Column and Row :)" << endl ;
-		}else
-		{
-			break ;
+			cin >> MAP[i][j];
 		}
 	}
 
-	char** matrix = new char* [R] ; // 행렬 선언
+	cnt = INT_MAX;
 
-	for( int i = 0 ; i < R ; i++ ) // 행렬 만들기
+	for (int i = 0; i <= R - 8; i++)
 	{
-		matrix[i] = new char[C] ;
-	}
-
-	char input = NULL ;
-
-	for( int i = 0 ; i < R ; i++ ) // 원래의 체스판을 설정하기 (흑, 백 색칠하기)
-	{
-		for( int j = 0 ; j < C ; j++ )
+		for (int j = 0; j <= C - 8; j++)
 		{
-			cin >> input ;
-			matrix[i][j] = input ;
+			check(i, j);
 		}
 	}
 
-	int tempcount = 0 ;
-	int mincount = 99999 ;
+	cout << cnt << endl;
 
-	for( int i = 0 ; i <= R - 8 ; i++ )
-	{
-		for( int j = 0 ; j <= C - 8 ; j++ ) // 첫 번째 위치 기준으로 8 x 8을 비교
-		{
-			for( int a = 0 ; a < 8 ; a++ )
-			{
-				for( int b = 0 ; b < 8 ; b++ )
-				{
-					if( (a+b) % 2 != 0 ) // 첫 번째 칸과 홀수 칸 건너 뛴 것들이
-					{
-						if( matrix[i][j] == matrix[i+a][j+b] ) // 첫 번째 칸과 색이 같으면 안됨
-						{
-							tempcount++ ;
-						}
-					}else // 첫 번째 칸과 짝수 칸 건너 뛴 것들이
-					{
-						if( matrix[i][j] != matrix[i+a][j+b] ) // 첫 번째 칸과 색이 다르면 안됨
-						{
-							tempcount++ ;
-						}
-					}
-				}
-			}
-
-			if ( tempcount > 32 ) // 첫 번째 칸을 기준으로 만약 비효율적으로 색을 더 많이 바꿨다면
-			{
-				tempcount = 64 - tempcount ; // 효율적으로 사실 첫 번째 칸을 바꿈으로써 효율적으로
-			}
-
-			if( tempcount < mincount )
-			{
-				mincount = tempcount ;
-			}
-
-			tempcount = 0 ;
-		}
-	}
-
-	cout << mincount << endl ; // 가장 작게 바꾼 숫자는 ?
-
-	return 0 ;
+	return 0;
 }
