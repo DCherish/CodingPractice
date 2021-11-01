@@ -29,10 +29,10 @@ int dy[4] = { 0, 0, -1, 1 };
 
 vector<info> vec;
 
-int Find(int idx)
+int Find(int k)
 {
-	if (parent[idx] == idx) return idx;
-	else return parent[idx] = Find(parent[idx]);
+	if (parent[k] == k) return k;
+	else return parent[k] = Find(parent[k]);
 }
 
 void Union(int x, int y)
