@@ -1,53 +1,20 @@
 import java.io.*
-import kotlin.math.*
-
-var s1 = "0"
-var s2 = "1"
+import java.math.*
 
 fun main() {
     val br = BufferedReader(InputStreamReader(System.`in`))
     val bw = BufferedWriter(OutputStreamWriter(System.out))
 
+    val arr = Array(10001) { BigInteger("0") }
     val N = br.readLine()!!.toInt()
-    var ans = ""
 
-    if (N == 0 || N == 1) {
-        ans = N.toString()
-    } else {
-        for (i in 2..N) {
-            ans = func()
+    arr[0] = BigInteger("0")
+    arr[1] = BigInteger("1")
 
-            s1 = s2
-            s2 = ans
-        }
+    for (i in 2..N) {
+        arr[i] = arr[i - 1] + arr[i - 2]
     }
 
-    bw.write("$ans\n")
+    bw.write("${arr[N]}\n")
     bw.flush()
-}
-
-fun func(): String {
-    var result = Array(max(s1.length, s2.length)) { '0' }.toCharArray()
-    var carry = 0
-
-    for (i in result.indices) {
-        var temp = carry
-        carry = 0
-
-        if (i < s1.length) temp += s1[s1.length - i - 1] - '0'
-        if (i < s2.length) temp += s2[s2.length - i - 1] - '0'
-
-        if (temp >= 10) {
-            carry = 1
-            temp -= 10
-        }
-
-        result[result.size - i - 1] = (temp + '0'.code).toChar()
-    }
-
-    if (carry == 1) {
-        return "1" + String(result)
-    }
-
-    return String(result)
 }
