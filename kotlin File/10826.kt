@@ -1,8 +1,8 @@
 import java.io.*
 import kotlin.math.*
 
-var s1 = ""
-var s2 = ""
+var s1 = "0"
+var s2 = "1"
 
 fun main() {
     val br = BufferedReader(InputStreamReader(System.`in`))
@@ -42,11 +42,11 @@ fun func(): String {
             temp -= 10
         }
 
-        result[result.size - i - 1] = temp.toChar()
+        result[result.size - i - 1] = (temp + '0'.code).toChar()
     }
 
     if (carry == 1) {
-
+        return "1" + String(result)
     }
 
     return String(result)
