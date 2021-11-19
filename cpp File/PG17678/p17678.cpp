@@ -25,7 +25,7 @@ string solution(int n, int t, int m, vector<string> timetable)
 
 	int min_time = 540;
 
-	for (int i = 0; i < timetable.size(); i++) // ºÐ °è»ê
+	for (int i = 0; i < timetable.size(); i++) // ï¿½ï¿½ ï¿½ï¿½ï¿½
 	{
 		vector<int> temp;
 
@@ -58,6 +58,7 @@ string solution(int n, int t, int m, vector<string> timetable)
 
 				if (full == 0) break;
 			}
+			else break;
 		}
 
 		if (i + 1 == n)
