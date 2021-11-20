@@ -12,9 +12,7 @@ void DFS(int cnt, int depth, int idx, int visited, vector<vector<string>> relati
 	{
 		for (int i = 0; i < vec.size(); i++)
 		{
-			int temp = (visited & vec[i]);
-
-			if (vec[i] - temp == 0) return;
+			if (vec[i] == (visited & vec[i])) return;
 		}
 
 		set<string> ST;
