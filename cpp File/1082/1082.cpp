@@ -36,6 +36,8 @@ string cmp(string a, string b)
 			if (a[i] > b[i]) return a;
 			else if (a[i] < b[i]) return b;
 		}
+
+		return a;
 	}
 }
 
