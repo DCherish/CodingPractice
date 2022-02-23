@@ -2,8 +2,9 @@
 
 using namespace std;
 
-int N;
 int coin[6] = { 500, 100, 50, 10, 5, 1 };
+
+int cost;
 int cnt = 0;
 
 int main()
@@ -12,20 +13,17 @@ int main()
 	cin.tie(0);
 	cout.tie(0);
 
-	cin >> N;
+	cin >> cost;
 
-	N = 1000 - N;
+	cost = 1000 - cost;
 
 	for (int i = 0; i < 6; i++)
 	{
-		if (N / coin[i] > 0)
+		if (cost >= coin[i])
 		{
-			cnt += N / coin[i];
-
-			N = N % coin[i];
+			cnt += (cost / coin[i]);
+			cost %= coin[i];
 		}
-
-		if (N == 0) break;
 	}
 
 	cout << cnt << "\n";
