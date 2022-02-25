@@ -1,13 +1,13 @@
 #include <iostream>
 #include <cstring>
-#include <vector>
 
 using namespace std;
 
-int N, K;
 bool prime[1001];
 
-vector<int> vec;
+int N, K, cnt;
+
+bool state = false;
 
 int main()
 {
@@ -15,27 +15,35 @@ int main()
 	cin.tie(0);
 	cout.tie(0);
 
-	cin >> N >> K;
-
 	memset(prime, true, sizeof(prime));
+
+	prime[0] = false;
+	prime[1] = false;
+
+	cin >> N >> K;
 
 	for (int i = 2; i <= N; i++)
 	{
-		if (prime[i] == false) continue;
+		if (!prime[i]) continue;
 
-		vec.push_back(i);
-
-		for (int j = i + i; j <= N; j = j + i)
+		for (int j = i; j <= N; j = j + i)
 		{
-			if (prime[j] == false) continue;
+			if (prime[j])
+			{
+				prime[j] = false;
 
-			prime[j] = false;
+				if (K == ++cnt)
+				{
+					cout << j << "\n";
+					state = true;
 
-			vec.push_back(j);
+					break;
+				}
+			}
 		}
-	}
 
-	cout << vec[K - 1] << "\n";
+		if (state) break;
+	}
 
 	return 0;
 }

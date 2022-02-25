@@ -1,14 +1,9 @@
 #include <iostream>
-#include <cmath>
-#define MAX 1000000000
 
 using namespace std;
 typedef long long ll;
 
-ll X, Y;
-int prev_rate;
-
-int ans;
+ll X, Y, Z, answer;
 
 int main()
 {
@@ -18,33 +13,33 @@ int main()
 
 	cin >> X >> Y;
 
-	prev_rate = Y * 100 / X;
+	Z = (Y * 100) / X;
 
-	if (prev_rate >= 99)
-	{
-		cout << -1 << "\n";
-	}
+	if (99 <= Z) answer = -1;
 	else
 	{
-		int l = 0;
-		int r = MAX;
+		ll start = 0;
+		ll end = 1e9;
 
-		while (l <= r)
+		while (start <= end)
 		{
-			int mid = (l + r) / 2;
+			ll mid = (start + end) >> 1;
 
-			int temp_rate = ((Y + mid) * 100) / (X + mid);
+			ll tempZ = ((Y + mid) * 100) / (X + mid);
 
-			if (prev_rate >= temp_rate)
+			if (tempZ > Z)
 			{
-				ans = mid + 1;
-				l = mid + 1;
+				answer = mid;
+				end = mid - 1;
 			}
-			else r = mid - 1;
+			else
+			{
+				start = mid + 1;
+			}
 		}
-
-		cout << ans << "\n";
 	}
+
+	cout << answer << "\n";
 
 	return 0;
 }

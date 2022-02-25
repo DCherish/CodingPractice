@@ -1,51 +1,27 @@
 #include <iostream>
+#include <cstring>
 #include <cmath>
 #include <string>
 
 using namespace std;
 
+bool prime[2000001];
 int N;
-int result;
-bool state1, state2;
 
-void solve()
+void setPrime()
 {
-	for (int i = N; i <= 2000000; i++)
+	memset(prime, true, sizeof(prime));
+
+	prime[0] = false;
+	prime[1] = false;
+
+	for (int i = 2; i <= sqrt(2e6); i++)
 	{
-		if (i <= 1) continue;
+		if (!prime[i]) continue;
 
-		state1 = true;
-		int idx = sqrt(i);
-
-		for (int j = 2; j <= idx; j++)
+		for (int j = i * i; j <= 2e6; j += i)
 		{
-			if (i % j == 0)
-			{
-				state1 = false;
-				break;
-			}
-		}
-
-		if (state1 == true)
-		{
-			string str = to_string(i);
-			int len = str.length();
-			state2 = true;
-
-			for (int j = 0; j < len / 2; j++)
-			{
-				if (str[j] != str[len - 1 - j])
-				{
-					state2 = false;
-					break;
-				}
-			}
-
-			if (state2 == true)
-			{
-				result = i;
-				return;
-			}
+			prime[j] = false;
 		}
 	}
 }
@@ -56,11 +32,33 @@ int main()
 	cin.tie(0);
 	cout.tie(0);
 
+	setPrime();
+
 	cin >> N;
 
-	solve();
+	for (int i = N; i <= 2e6; i++)
+	{
+		if (prime[i])
+		{
+			string str = to_string(i);
+			bool state = true;
 
-	cout << result << "\n";
+			for (int j = 0; j < str.length() / 2; j++)
+			{
+				if (str[j] != str[str.length() - 1 - j])
+				{
+					state = false;
+					break;
+				}
+			}
+
+			if (state)
+			{
+				cout << i << "\n";
+				break;
+			}
+		}
+	}
 
 	return 0;
 }
