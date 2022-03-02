@@ -18,15 +18,14 @@ bool cmp(string a, string b)
 
 		for (int j = 0; j < a_len; j++)
 		{
-			if (a[j] == b[i + j])
+			if (i + j < b.length() && a[j] == b[i + j])
 			{
 				cnt++;
 
 				if (cnt == a_len)
 				{
-					if (i + j == b.length() - 1) return true;
+                    if (i + j + 1 == b.length()) return true;
 					if (b[i + j + 1] != '#') return true;
-
 					else break;
 				}
 			}

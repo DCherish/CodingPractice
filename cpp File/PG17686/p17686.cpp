@@ -46,7 +46,7 @@ cvt cnvert(string s)
 		}
 		else if (s[i] >= 'A' && s[i] <= 'Z')
 		{
-			result.head += (char)((int)s[i] + 32);
+			result.head += tolower(s[i]);
 		}
 		else if (s[i] >= '0' && s[i] <= '9')
 		{
