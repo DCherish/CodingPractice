@@ -40,7 +40,7 @@ vector<int> solution(vector<string> words, vector<string> queries) {
 	{
 		int hi, lo;
 
-		if (queries[i][0] == '?') // ?·Î ½ÃÀÛÇÒ °æ¿ì
+		if (queries[i][0] == '?') // ?ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		{
 			string temp = "";
 			string temp2 = "";
@@ -51,7 +51,6 @@ vector<int> solution(vector<string> words, vector<string> queries) {
 				{
 					temp += queries[i][j];
 				}
-
 				else break;
 			}
 
@@ -73,7 +72,7 @@ vector<int> solution(vector<string> words, vector<string> queries) {
 
 			lo = lower_bound(r_strvec.begin(), r_strvec.end(), temp2, cmp) - r_strvec.begin();
 		}
-		else // ?·Î ½ÃÀÛÇÏÁö ¾ÊÀ» °æ¿ì
+		else // ?ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		{
 			string temp = "";
 			string temp2 = "";
