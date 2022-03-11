@@ -18,173 +18,127 @@ string v_func();
 
 string u_func()
 {
-	string answer = "";
+    string answer = "";
 
-	deque<char> DQ_t;
+    deque<char> DQ_t;
 
-	bool state = true;
+    bool state = true;
 
-	while (!DQ_2.empty())
-	{
-		char front = DQ_2.front();
-		DQ_2.pop_front();
+    while (!DQ_2.empty())
+    {
+        char front = DQ_2.front();
+        DQ_2.pop_front();
 
-		DQ_t.push_back(front); // ¿ﬂ∂Û≥Ω Ωƒ ∫∏∞¸
+        DQ_t.push_back(front); // ÏûòÎùºÎÇ∏ Ïãù Î≥¥Í¥Ä
 
-		if (front == '(')
-		{
-			S.push(front);
-		}
-		else
-		{
-			if (S.empty())
-			{
-				while (!DQ_2.empty())
-				{
-					DQ_t.push_back(DQ_2.front());
-					DQ_2.pop_front();
-				}
+        if (front == '(')
+        {
+            S.push(front);
+        }
+        else
+        {
+            if (S.empty())
+            {
+                while (!DQ_2.empty())
+                {
+                    DQ_t.push_back(DQ_2.front());
+                    DQ_2.pop_front();
+                }
 
-				state = false;
-			}
-			else
-			{
-				S.pop();
-			}
-		}
-	}
+                state = false;
+            }
+            else
+            {
+                S.pop();
+            }
+        }
+    }
 
-	if (state == false) // ∞≈¡˛¿∏∑Œ ∆«∏Ì≥≠ ∞ÊøÏ
-	{
-		answer += "(";
+    if (state == false) // Í±∞ÏßìÏúºÎ°ú ÌåêÎ™ÖÎÇú Í≤ΩÏö∞
+    {
+        answer += "(";
 
-		answer += v_func();
+        answer += v_func();
 
-		answer += ")";
+        answer += ")";
 
-		DQ_t.pop_front();
+        DQ_t.pop_front();
 
-		while (DQ_t.size() > 1)
-		{
-			char temp = DQ_t.front();
-			DQ_t.pop_front();
+        while(DQ_t.size() > 1)
+        {
+            char temp = DQ_t.front();
+            DQ_t.pop_front();
 
-			if (temp == '(')
-			{
-				answer += ")";
-			}
-			else
-			{
-				answer += "(";
-			}
-		}
-	}
-	else
-	{
-		while (!DQ_t.empty())
-		{
-			char temp = DQ_t.front();
-			DQ_t.pop_front();
+            if (temp == '(')
+            {
+                answer += ")";
+            }
+            else
+            {
+                answer += "(";
+            }
+        }
+    }
+    else
+    {
+        while (!DQ_t.empty())
+        {
+            char temp = DQ_t.front();
+            DQ_t.pop_front();
 
-			answer += temp;
-		}
-	}
+            answer += temp;
+        }
+    }
 
-	return answer;
+    return answer;
 }
 
 string v_func()
 {
-	string answer = "";
+    string answer = "";
+    
+    l_cnt = 0;
+    r_cnt = 0;
 
-	l_cnt = 0;
-	r_cnt = 0;
+    while (!DQ_1.empty())
+    {
+        char front = DQ_1.front();
+        DQ_1.pop_front();
 
-	while (!DQ_1.empty())
-	{
-		char front = DQ_1.front();
-		DQ_1.pop_front();
+        DQ_2.push_back(front); // ÏãùÏóêÏÑú ÏûòÎùºÎÇ¥Í∏∞
 
-		DQ_2.push_back(front); // Ωƒø°º≠ ¿ﬂ∂Û≥ª±‚
+        if (front == '(')
+        {
+            l_cnt++;
+        }
+        else
+        {
+            r_cnt++;
+        }
 
-		if (front == '(')
-		{
-			l_cnt++;
-		}
-		else
-		{
-			r_cnt++;
-		}
+        if (l_cnt == r_cnt)
+        {
+            answer += u_func();
+            answer += v_func();
 
-		if (l_cnt == r_cnt)
-		{
-			answer += u_func();
-			answer += v_func();
+            l_cnt = 0;
+            r_cnt = 0;
+        }
+    }
 
-			l_cnt = 0;
-			r_cnt = 0;
-		}
-	}
-
-	return answer;
+    return answer;
 }
 
 string solution(string p)
-{
-	string answer = "";
+{    
+    string answer = "";
 
-	l_cnt = 0;
-	r_cnt = 0;
+    for (int i = 0; i < p.length(); i++)
+    {
+        DQ_1.push_back(p[i]); // ÏõêÎûò Ïãù ÏûÖÎ†•
+    }
 
-	for (int i = 0; i < p.length(); i++)
-	{
-		DQ_1.push_back(p[i]); // ø¯∑° Ωƒ ¿‘∑¬
-	}
+    answer += v_func();
 
-	while (!DQ_1.empty())
-	{
-		char front = DQ_1.front();
-		DQ_1.pop_front();
-
-		DQ_2.push_back(front); // Ωƒø°º≠ ¿ﬂ∂Û≥ª±‚
-
-		if (front == '(')
-		{
-			l_cnt++;
-		}
-		else
-		{
-			r_cnt++;
-		}
-
-		if (l_cnt == r_cnt)
-		{
-			answer += u_func();
-			answer += v_func();
-
-			l_cnt = 0;
-			r_cnt = 0;
-		}
-	}
-
-	return answer;
-}
-
-int main()
-{
-	ios_base::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
-	string p1 = "(()())()";
-	string p2 = ")(";
-	string p3 = "()))((()";
-	string p4 = ")()()()(";
-
-	cout << solution(p1) << "\n";
-	cout << solution(p2) << "\n";
-	cout << solution(p3) << "\n";
-	cout << solution(p4) << "\n";
-
-	return 0;
+    return answer;
 }
