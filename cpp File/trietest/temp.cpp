@@ -82,8 +82,6 @@ int solution(string s)
 
 int main()
 {
-	//기존 프로젝트를 mac과 연동 test
-	//123123
 	//string s = "[]([[]){}";
 	//string s = "{([()]))}";
 	//string s = "(()()()";
