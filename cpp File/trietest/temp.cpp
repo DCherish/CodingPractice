@@ -82,7 +82,6 @@ int solution(string s)
 
 int main()
 {
-	//mac test
 	//string s = "[]([[]){}";
 	//string s = "{([()]))}";
 	//string s = "(()()()";
