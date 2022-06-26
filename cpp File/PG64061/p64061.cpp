@@ -1,64 +1,47 @@
-#include <iostream>
 #include <string>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
-vector<int> vec[31];
-vector<int> pick;
+stack<int> lane[31];
+stack<int> basket;
 
-int solution(vector<vector<int>> board, vector<int> moves) {
+int solution(vector<vector<int>> board, vector<int> moves)
+{
     int answer = 0;
-
-    int size = board.size();
-
-    int cnt = 0;
-
-    for (int i = size - 1; i >= 0; i--)
+    
+    for (int i = 0; i < board.size(); i++)
     {
-        for (int j = 0; j < size; j++)
+        for (int j = board.size() - 1; j >= 0; j--)
         {
-            if (board[i][j] == 0) continue;
-
-            vec[j + 1].push_back(board[i][j]);
+            if (board[j][i] != 0)
+            {
+                lane[i + 1].push(board[j][i]);
+            }
         }
     }
-
+    
     for (int i = 0; i < moves.size(); i++)
     {
         int idx = moves[i];
-
-        int sz = vec[idx].size();
-
-        if (sz == 0) continue;
-        else
+        
+        if (!lane[idx].empty())
         {
-            int doll = vec[idx][sz - 1];
-
-            vec[idx].pop_back();
+            int num = lane[idx].top();
+            lane[idx].pop();
             
-            if (pick.size() == 0)
+            if (!basket.empty() && basket.top() == num)
             {
-                pick.push_back(doll);
+                answer += 2;
+                basket.pop();
             }
             else
             {
-                int prev = pick[pick.size() - 1];
-
-                if (prev == doll)
-                {
-                    pick.pop_back();
-                    cnt++;
-                }
-                else
-                {
-                    pick.push_back(doll);
-                }
+                basket.push(num);
             }
         }
     }
-
-    answer = cnt;
-
+    
     return answer;
 }

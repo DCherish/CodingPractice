@@ -1,21 +1,23 @@
 #include <string>
 #include <vector>
+#include <cctype>
 
 using namespace std;
 
-string solution(string new_id) {
-    string answer = "";
-
+string solution(string new_id)
+{
+    string answer = "HI";
+    
     string temp = "";
-
-    for (int i = 0; i < new_id.length(); i++) // 1, 2단계
+    
+    for (int i = 0; i < new_id.length(); i++)
     {
         if (new_id[i] >= 'A' && new_id[i] <= 'Z')
         {
-            new_id[i] += 32;
-            temp = temp + new_id[i]; 
+            new_id[i] = tolower(new_id[i]);
+            temp += new_id[i];
         }
-        else if (new_id[i] == '-' || new_id[i] == '_' || new_id[i] == '.')
+        else if (new_id[i] >= '0' && new_id[i] <= '9')
         {
             temp += new_id[i];
         }
@@ -23,57 +25,56 @@ string solution(string new_id) {
         {
             temp += new_id[i];
         }
-        else if (new_id[i] >= '0' && new_id[i] <= '9')
+        else if (new_id[i] == '-' || new_id[i] == '_' || new_id[i] == '.')
         {
             temp += new_id[i];
         }
-        else continue;
     }
-
+    
     new_id = "";
-
-    for (int i = 0; i < temp.length(); i++) // 3단계
+    
+    for (int i = 0; i < temp.length(); i++)
     {
         if (temp[i] == '.' && temp[i + 1] == '.') continue;
         else new_id += temp[i];
     }
-
-    if (new_id[0] == '.') // 4단계
+    
+    if (new_id[0] == '.')
     {
         new_id = new_id.substr(1, new_id.length() - 1);
     }
-
-    if (new_id[new_id.length() - 1] == '.') // 4단계
+    
+    if (new_id[new_id.length() - 1] == '.')
     {
         new_id = new_id.substr(0, new_id.length() - 1);
     }
-
-    if (new_id == "") // 5단계
+    
+    if (new_id == "")
     {
         new_id = "a";
     }
-
-    if (new_id.length() >= 16) // 6단계
+    
+    if (new_id.length() >= 16)
     {
         new_id = new_id.substr(0, 15);
-
+        
         if (new_id[new_id.length() - 1] == '.')
         {
             new_id = new_id.substr(0, new_id.length() - 1);
         }
     }
-
-    if (new_id.length() <= 2) // 7단계
+    
+    if (new_id.length() <= 2)
     {
-        string tempstr = new_id.substr(new_id.length() - 1, 1);
-
+        char c = new_id[new_id.length() - 1];
+        
         while (new_id.length() < 3)
         {
-            new_id += tempstr;
+            new_id += c;
         }
     }
-
+    
     answer = new_id;
-
+    
     return answer;
 }

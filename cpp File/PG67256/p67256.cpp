@@ -6,84 +6,80 @@ using namespace std;
 
 struct pnt
 {
-	int x;
-	int y;
+    int x;
+    int y;
 };
 
-int dx[4] = { -1, 1, 0, 0 }; // »óÇÏÁÂ¿ì
-int dy[4] = { 0, 0, -1, 1 };
+pnt l, r;
 
-int loc_x[10] = { 3, 0, 0, 0, 1, 1, 1, 2, 2, 2 };
-int loc_y[10] = { 1, 0, 1, 2, 0, 1, 2, 0, 1, 2 };
-
-pnt prev_left, prev_right;
-
-int cal(int x, int y, int num)
-{
-	return abs(loc_x[num] - x) + abs(loc_y[num] - y);
-}
+int keyx[12] = { 3, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3 };
+int keyy[12] = { 1, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 2 };
 
 string solution(vector<int> numbers, string hand)
 {
-	string answer = "";
-
-	prev_left.x = 3;
-	prev_left.y = 0;
-
-	prev_right.x = 3;
-	prev_right.y = 2;
-
-	for (int i = 0; i < numbers.size(); i++)
-	{
-		if (numbers[i] == 1 || numbers[i] == 4 || numbers[i] == 7)
-		{
-			answer += "L";
-
-			prev_left.x = loc_x[numbers[i]];
-			prev_left.y = loc_y[numbers[i]];
-		}
-		else if (numbers[i] == 3 || numbers[i] == 6 || numbers[i] == 9)
-		{
-			answer += "R";
-
-			prev_right.x = loc_x[numbers[i]];
-			prev_right.y = loc_y[numbers[i]];
-		}
-		else
-		{
-			if (cal(prev_left.x, prev_left.y, numbers[i]) < cal(prev_right.x, prev_right.y, numbers[i]))
-			{
-				answer += "L";
-
-				prev_left.x = loc_x[numbers[i]];
-				prev_left.y = loc_y[numbers[i]];
-			}
-			else if (cal(prev_left.x, prev_left.y, numbers[i]) > cal(prev_right.x, prev_right.y, numbers[i]))
-			{
-				answer += "R";
-
-				prev_right.x = loc_x[numbers[i]];
-				prev_right.y = loc_y[numbers[i]];
-			}
-			else
-			{
-				if (hand.compare("left") == 0)
-				{
-					answer += "L";
-
-					prev_left.x = loc_x[numbers[i]];
-					prev_left.y = loc_y[numbers[i]];
-				}
-				else
-				{
-					answer += "R";
-
-					prev_right.x = loc_x[numbers[i]];
-					prev_right.y = loc_y[numbers[i]];
-				}
-			}
-		}
-	}
-
-	return answer;
+    string answer = "";
+    
+    l.x = 3;
+    l.y = 0;
+    
+    r.x = 3;
+    r.y = 2;
+    
+    for (int i = 0; i < numbers.size(); i++)
+    {
+        if (numbers[i] == 1 || numbers[i] == 4 || numbers[i] == 7)
+        {
+            answer += "L";
+            
+            l.x = keyx[numbers[i]];
+            l.y = keyy[numbers[i]];
+        }
+        else if (numbers[i] == 3 || numbers[i] == 6 || numbers[i] == 9)
+        {
+            answer += "R";
+            
+            r.x = keyx[numbers[i]];
+            r.y = keyy[numbers[i]];
+        }
+        else
+        {
+            int ld = abs(keyx[numbers[i]] - l.x) + abs(keyy[numbers[i]] - l.y);
+            int rd = abs(keyx[numbers[i]] - r.x) + abs(keyy[numbers[i]] - r.y);
+            
+            if (ld < rd)
+            {
+                answer += "L";
+            
+                l.x = keyx[numbers[i]];
+                l.y = keyy[numbers[i]];
+            }
+            else if (ld > rd)
+            {
+                answer += "R";
+            
+                r.x = keyx[numbers[i]];
+                r.y = keyy[numbers[i]];
+            }
+            else
+            {
+                // if (hand.compare("left") == 0)
+                if (hand == "left")
+                {
+                    answer += "L";
+            
+                    l.x = keyx[numbers[i]];
+                    l.y = keyy[numbers[i]];
+                }
+                else
+                {
+                    answer += "R";
+            
+                    r.x = keyx[numbers[i]];
+                    r.y = keyy[numbers[i]];
+                }
+            }
+        }
+    }
+    
+    return answer;
 }

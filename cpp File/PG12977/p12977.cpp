@@ -1,69 +1,62 @@
 #include <vector>
 #include <cstring>
 #include <cmath>
+#define N 3000
 
 using namespace std;
 
-int answer = 0;
+bool prime[N + 1];
+int result = 0;
 
-bool visited[1001];
-bool prime[3001];
+vector<int> vec;
 
-void DFS(int depth, int idx, vector<int> nums)
+void get_prime()
 {
-	if (depth == 3)
-	{
-		int cnt = 0;
-		int sum = 0;
-
-		for (int i = 0; i < nums.size(); i++)
-		{
-			if (visited[nums[i]] == true)
-			{
-				sum += nums[i];
-				cnt++;
-			}
-
-			if (cnt == 3) break;
-		}
-
-		if (prime[sum] == true) answer++;
-
-		return;
-	}
-
-	for (int i = idx; i < nums.size(); i++)
-	{
-		visited[nums[i]] = true;
-		DFS(depth + 1, i + 1, nums);
-		visited[nums[i]] = false;
-	}
+    prime[0] = false;
+    prime[1] = false;
+    
+    for (int i = 2; i <= sqrt(N); i++)
+    {
+        if (prime[i] == false) continue;
+        
+        for (int j = i * i; j <= N; j += i)
+        {
+            prime[j] = false;
+        }
+    }
 }
 
-void pre_setting()
+void DFS(int depth, int idx, int sum)
 {
-	memset(visited, false, sizeof(visited));
-	memset(prime, true, sizeof(prime));
-
-	prime[0] = false;
-	prime[1] = false;
-
-	for (int i = 2; i <= sqrt(3000); i++)
-	{
-		if (prime[i] == false) continue;
-
-		for (int j = i * i; j <= 3000; j += i)
-		{
-			prime[j] = false;
-		}
-	}
+    if (depth == 3)
+    {
+        if (prime[sum] == true)
+        {
+            result++;
+        }
+        
+        return;
+    }
+    
+    for (int i = idx; i < vec.size(); i++)
+    {
+        DFS(depth + 1, i + 1, sum + vec[i]);
+    }
 }
 
 int solution(vector<int> nums)
 {
-	pre_setting();
+    int answer = -1;
 
-	DFS(0, 0, nums);
+    vec = nums;
+    
+    memset(prime, true, sizeof(prime));
+    
+    get_prime();
+    
+    DFS(0, 0, 0);
+    
+    answer = result;
 
-	return answer;
+    return answer;
 }
