@@ -1,70 +1,54 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <unordered_map>
 #include <algorithm>
-#include <set>
 
 using namespace std;
 
-set<int> ST;
+unordered_map<int, int> umap;
 
-bool cmp(vector<int> a, vector<int> b)
+bool cmp(pair<int, int> &a, pair<int, int> &b)
 {
-	return a.size() < b.size();
+    return a.second > b.second;
 }
 
 vector<int> solution(string s)
 {
-	vector<int> answer;
-
-	vector<vector<int>> vec;
-
-	stringstream ss(s);
-	string token;
-
-	while (getline(ss, token, '}'))
-	{
-		if (token == "") break;
-
-		string str = "";
-
-		vector<int> temp;
-
-		for (int i = 2; i < token.length(); i++)
-		{
-			if (token[i] >= '0' && token[i] <= '9')
-			{
-				str += token[i];
-			}
-			else if (token[i] == ',')
-			{
-				temp.push_back(stoi(str));
-
-				str = "";
-			}
-		}
-
-		temp.push_back(stoi(str));
-
-		vec.push_back(temp);
-	}
-
-	sort(vec.begin(), vec.end(), cmp);
-
-	for (int i = 0; i < vec.size(); i++)
-	{
-		for (int j = 0; j < vec[i].size(); j++)
-		{
-			if (ST.count(vec[i][j]) == 0)
-			{
-				ST.insert(vec[i][j]);
-
-				answer.push_back(vec[i][j]);
-
-				break;
-			}
-		}
-	}
-
-	return answer;
+    vector<int> answer;
+    
+    stringstream ss(s);
+    string token;
+    
+    while (getline(ss, token, '}'))
+    {
+        if (token == "") break;
+        
+        string str = "";
+        
+        for (int i = 2; i < token.length(); i++)
+        {
+            if (token[i] >= '0' && token[i] <= '9')
+            {
+                str += token[i];
+            }
+            else
+            {
+                umap[stoi(str)] += 1;
+                str = "";
+            }
+        }
+        
+        umap[stoi(str)] += 1;
+    }
+    
+    vector<pair<int, int>> vec(umap.begin(), umap.end());
+    sort(vec.begin(), vec.end(), cmp);
+    
+    for (int i = 0; i < vec.size(); i++)
+    {
+        answer.push_back(vec[i].first);
+    }
+    
+    return answer;
 }

@@ -3,31 +3,28 @@
 using namespace std;
 typedef long long ll;
 
-int gcd(int w, int h)
+ll gcd(ll x, ll r)
 {
-	if (w < h) swap(w, h);
-
-	while (true)
-	{
-		int temp = w % h;
-
-		if (temp == 0) return h;
-		else
-		{
-			w = h;
-			h = temp;
-		}
-	}
+    if (x < r) swap(x, r);
+    
+    while (x % r != 0)
+    {
+        ll temp = x % r;
+        x = r;
+        r = temp;
+    }
+    
+    return r;
 }
 
-long long solution(int w, int h)
+long long solution(int w, int h) 
 {
-	ll answer = (ll)w * (ll)h;
-
-	answer -= (ll)w;
-	answer -= (ll)h;
-
-	answer += (ll)gcd(w, h);
-
-	return answer;
+    long long answer = 1;
+    
+    ll width = (ll)w;
+    ll height = (ll)h;
+    
+    answer = width * height - (width + height - gcd(width, height));
+    
+    return answer;
 }
