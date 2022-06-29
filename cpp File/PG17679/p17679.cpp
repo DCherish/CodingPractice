@@ -1,4 +1,3 @@
-
 #include <string>
 #include <vector>
 
@@ -15,14 +14,12 @@ int dy[3] = { 1, 0, 1 };
 
 bool check(int x, int y, vector<string> board)
 {
-	char idx = board[x][y];
-
 	for (int i = 0; i < 3; i++)
 	{
 		int nx = x + dx[i];
 		int ny = y + dy[i];
 
-		if (idx != board[nx][ny]) return false;
+		if (board[x][y] != board[nx][ny]) return false;
 	}
 
 	return true;

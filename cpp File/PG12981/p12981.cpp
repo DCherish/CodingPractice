@@ -1,10 +1,10 @@
 #include <string>
 #include <vector>
-#include <set>
+#include <unordered_set>
 
 using namespace std;
 
-set<string> ST;
+unordered_set<string> uset;
 
 vector<int> solution(int n, vector<string> words)
 {
@@ -17,31 +17,38 @@ vector<int> solution(int n, vector<string> words)
 
 	for (int i = 0; i < words.size(); i++)
 	{
+        string word = words[i];
+        
+        if (word.length() == 1)
+        {
+            idx = (i % n) + 1;
+			turn = (i / n) + 1;
+			break;
+        }
+        
 		if (prev == "")
 		{
-			ST.insert(words[i]);
-			prev = words[i];
+			uset.insert(word);
+			prev = word;
 		}
 		else
 		{
-			if (prev[prev.length() - 1] != words[i][0])
+			if (prev[prev.length() - 1] != word[0])
 			{
 				idx = (i % n) + 1;
 				turn = (i / n) + 1;
 				break;
 			}
 
-			if (ST.count(words[i]) == 0)
-			{
-				ST.insert(words[i]);
-				prev = words[i];
-			}
-			else
+			if (uset.count(word) != 0)
 			{
 				idx = (i % n) + 1;
 				turn = (i / n) + 1;
 				break;
 			}
+            
+            uset.insert(word);
+			prev = word;
 		}
 	}
 

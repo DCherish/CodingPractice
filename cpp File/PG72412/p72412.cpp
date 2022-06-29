@@ -1,22 +1,23 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <map>
 #include <algorithm>
 
 using namespace std;
 
-vector<int> solution(vector<string> info, vector<string> query) {
-    vector<int> answer;
-    vector<int> db[3][2][2][2];
+vector<int> db[3][2][2][2];
 
+vector<int> solution(vector<string> info, vector<string> query)
+{
+    vector<int> answer;
+    
     for (int i = 0; i < info.size(); i++)
     {
-        vector<int> vec;
-
         stringstream ss(info[i]);
         string token;
-
+        
+        vector<int> vec;
+        
         while (getline(ss, token, ' '))
         {
             if (token == "java" || token == "backend"
@@ -38,10 +39,10 @@ vector<int> solution(vector<string> info, vector<string> query) {
                 vec.push_back(stoi(token));
             }
         }
-
+        
         db[vec[0]][vec[1]][vec[2]][vec[3]].push_back(vec[4]);
     }
-
+    
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 2; j++)
@@ -55,12 +56,12 @@ vector<int> solution(vector<string> info, vector<string> query) {
             }
         }
     }
-
+    
     for (int i = 0; i < query.size(); i++)
     {
         vector<int> vec;
 
-        int ai, bi, aj, bj, ak, bk, al, bl, score;
+        int a1, a2, b1, b2, c1, c2, d1, d2, score;
 
         stringstream ss(query[i]);
         string token;
@@ -97,96 +98,97 @@ vector<int> solution(vector<string> info, vector<string> query) {
 
         if (vec[0] == 0) // java
         {
-            ai = 0;
-            bi = 0;
+            a1 = 0;
+            a2 = 0;
         }
         else if (vec[0] == 1) // python
         {
-            ai = 1;
-            bi = 1;
+            a1 = 1;
+            a2 = 1;
         }
         else if (vec[0] == 2) // cpp
         {
-            ai = 2;
-            bi = 2;
+            a1 = 2;
+            a2 = 2;
         }
         else if (vec[0] == 3) // -
         {
-            ai = 0;
-            bi = 2;
+            a1 = 0;
+            a2 = 2;
         }
 
         if (vec[1] == 0) // backend
         {
-            aj = 0;
-            bj = 0;
+            b1 = 0;
+            b2 = 0;
         }
         else if (vec[1] == 1) // frontend
         {
-            aj = 1;
-            bj = 1;
+            b1 = 1;
+            b2 = 1;
         }
         else if (vec[1] == 3) // -
         {
-            aj = 0;
-            bj = 1;
+            b1 = 0;
+            b2 = 1;
         }
 
         if (vec[2] == 0) // junior
         {
-            ak = 0;
-            bk = 0;
+            c1 = 0;
+            c2 = 0;
         }
         else if (vec[2] == 1) // senior
         {
-            ak = 1;
-            bk = 1;
+            c1 = 1;
+            c2 = 1;
         }
         else if (vec[2] == 3) // -
         {
-            ak = 0;
-            bk = 1;
+            c1 = 0;
+            c2 = 1;
         }
 
         if (vec[3] == 0) // pizza
         {
-            al = 0;
-            bl = 0;
+            d1 = 0;
+            d2 = 0;
         }
         else if (vec[3] == 1) // chicken
         {
-            al = 1;
-            bl = 1;
+            d1 = 1;
+            d2 = 1;
         }
         else if (vec[3] == 3) // -
         {
-            al = 0;
-            bl = 1;
+            d1 = 0;
+            d2 = 1;
         }
 
-        int temp_answer = 0;
         score = vec[4];
+        
+        int temp = 0;
 
-        for (int i = ai; i <= bi; i++)
+        for (int a = a1; a <= a2; a++)
         {
-            for (int j = aj; j <= bj; j++)
+            for (int b = b1; b <= b2; b++)
             {
-                for (int k = ak; k <= bk; k++)
+                for (int c = c1; c <= c2; c++)
                 {
-                    for (int l = al; l <= bl; l++)
+                    for (int d = d1; d <= d2; d++)
                     {
-                        int n = db[i][j][k][l].size();
+                        int n = db[a][b][c][d].size();
 
                         if (n == 0) continue;
 
-                        if (lower_bound(db[i][j][k][l].begin(), db[i][j][k][l].end(), score) == db[i][j][k][l].end()) continue;
-                        else temp_answer += n - (lower_bound(db[i][j][k][l].begin(), db[i][j][k][l].end(), score) - db[i][j][k][l].begin());
+                        if (lower_bound(db[a][b][c][d].begin(), db[a][b][c][d].end(), score) == db[a][b][c][d].end()) continue;
+                        else temp += n - (lower_bound(db[a][b][c][d].begin(), db[a][b][c][d].end(), score) - db[a][b][c][d].begin());
                     }
                 }
             }
         }
 
-        answer.push_back(temp_answer);
+        answer.push_back(temp);
     }
 
     return answer;
