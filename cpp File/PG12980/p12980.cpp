@@ -1,27 +1,23 @@
-#include <vector>
+#include <iostream>
 
 using namespace std;
 
 int solution(int n)
 {
-	int ans = 1;
+    int ans = 0;
+    
+    while (n != 0)
+    {
+        if (n % 2 == 0)
+        {
+            n /= 2;
+        }
+        else
+        {
+            n -= 1;
+            ans++;
+        }
+    }
 
-	int cnt = 0;
-
-	while (n != 1)
-	{
-		if (n % 2 != 0)
-		{
-			n -= 1;
-			cnt++;
-		}
-		else
-		{
-			n /= 2;
-		}
-	}
-
-	if (cnt > 0) ans += cnt;
-
-	return ans;
+    return ans;
 }

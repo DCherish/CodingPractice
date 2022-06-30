@@ -1,92 +1,84 @@
 #include <string>
 #include <vector>
+#include <cctype>
 #include <algorithm>
 
 using namespace std;
 
-struct cvt
-{
-	string head;
-	int number;
-};
-
 struct info
 {
-	cvt c;
-	int idx;
+    string head;
+    int number;
+    int idx;
 };
+
+vector<info> vec;
 
 bool cmp(info a, info b)
 {
-	if (a.c.head == b.c.head)
-	{
-		if (a.c.number == b.c.number)
-		{
-			return a.idx < b.idx;
-		}
-		else return a.c.number < b.c.number;
-	}
-	else return a.c.head < b.c.head;
+    if (a.head == b.head)
+    {
+        if (a.number == b.number)
+        {
+            return a.idx < b.idx;
+        }
+        return a.number < b.number;
+    }
+    return a.head < b.head;
 }
 
-cvt cnvert(string s)
+string cnvert(string s)
 {
-	cvt result;
-
-	result.head = "";
-	result.number = 0;
-
-	int temp;
-
-	for (int i = 0; i < s.length(); i++)
-	{
-		if (s[i] >= 'a' && s[i] <= 'z')
-		{
-			result.head += s[i];
-		}
-		else if (s[i] >= 'A' && s[i] <= 'Z')
-		{
-			result.head += tolower(s[i]);
-		}
-		else if (s[i] >= '0' && s[i] <= '9')
-		{
-			temp = i;
-			break;
-		}
-		else result.head += s[i];
-	}
-
-	for (int i = temp; i < temp + 5; i++)
-	{
-		if (s[i] >= '0' && s[i] <= '9')
-		{
-			result.number *= 10;
-			result.number += (int)(s[i] - '0');
-		}
-		else break;
-	}
-
-	return result;
+    string result = "";
+    
+    for (int i = 0; i < s.length(); i++)
+    {
+        result += tolower(s[i]);
+    }
+    
+    return result;
 }
 
 vector<string> solution(vector<string> files)
 {
-	vector<string> answer;
-
-	vector<info> vec;
-
-	for (int i = 0; i < files.size(); i++)
-	{
-		cvt cv = cnvert(files[i]);
-		vec.push_back({ cv, i });
-	}
-
-	sort(vec.begin(), vec.end(), cmp);
-
-	for (int i = 0; i < vec.size(); i++)
-	{
-		answer.push_back(files[vec[i].idx]);
-	}
-
-	return answer;
+    vector<string> answer;
+    
+    for (int i = 0; i < files.size(); i++)
+    {
+        int x, y;
+        int j;
+        
+        for (j = 0; j < files[i].length(); j++)
+        {
+            if (files[i][j] >= '0' && files[i][j] <= '9')
+            {
+                x = j;
+                break;
+            }
+        }
+        
+        for (j = x; j < files[i].length(); j++)
+        {
+            if (files[i][j] < '0' || files[i][j] > '9')
+            {
+                break;
+            }
+        }
+        
+        y = j;
+        
+        string h = cnvert(files[i].substr(0, x));
+        int n = stoi(files[i].substr(x, (y - x)));
+        
+        vec.push_back({ h, n, i });
+    }
+    
+    sort(vec.begin(), vec.end(), cmp);
+    
+    for (int i = 0; i < vec.size(); i++)
+    {
+        answer.push_back(files[vec[i].idx]);
+    }
+    
+    return answer;
 }

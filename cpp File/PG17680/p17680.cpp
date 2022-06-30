@@ -1,88 +1,89 @@
 #include <string>
 #include <vector>
 #include <deque>
-#include <set>
+#include <unordered_set>
+#include <cctype>
 
 using namespace std;
 
-deque<string> DQ;
-set<string> ST;
+unordered_set<string> uset;
 
-void cnvert(int idx, vector<string>& cities)
+deque<string> DQ;
+
+void refresh_DQ(string s)
 {
-	for (int i = 0; i < cities[idx].length(); i++)
-	{
-		if (cities[idx][i] >= 'a' && cities[idx][i] <= 'z')
-		{
-			cities[idx][i] -= 'a';
-			cities[idx][i] += 'A';
-		}
-	}
+    for (int i = 0; i < DQ.size(); i++)
+    {
+        if (DQ[i] == s)
+        {
+            DQ.erase(DQ.begin() + i, DQ.begin() + i + 1);
+            DQ.push_back(s);
+            break;
+        }
+    }
+}
+
+string cnvert(string str)
+{
+    string result = "";
+    
+    for (int i = 0; i < str.length(); i++)
+    {
+        result += tolower(str[i]);
+    }
+    
+    return result;
 }
 
 int solution(int cacheSize, vector<string> cities)
 {
-	int answer = 0;
-
-	if (cacheSize == 0)
-	{
-		answer = (5 * cities.size());
-	}
-	else
-	{
-		for (int i = 0; i < cities.size(); i++)
-		{
-			cnvert(i, cities);
-
-			if (ST.count(cities[i]) == 0)
-			{
-				if (DQ.size() < cacheSize)
-				{
-					DQ.push_back(cities[i]);
-					ST.insert(cities[i]);
-				}
-				else
-				{
-					string temp = DQ.front();
-					DQ.pop_front();
-
-					ST.erase(temp);
-
-					DQ.push_back(cities[i]);
-					ST.insert(cities[i]);
-				}
-
-				answer += 5;
-			}
-			else
-			{
-				deque<string> tempDQ;
-
-				while (true)
-				{
-					if (DQ.front() == cities[i])
-					{
-						DQ.pop_front();
-						DQ.push_back(cities[i]);
-						break;
-					}
-					else
-					{
-						tempDQ.push_back(DQ.front());
-						DQ.pop_front();
-					}
-				}
-
-				while (!tempDQ.empty())
-				{
-					DQ.push_front(tempDQ.back());
-					tempDQ.pop_back();
-				}
-
-				answer += 1;
-			}
-		}
-	}
-
-	return answer;
+    int answer = 0;
+    
+    if (cacheSize == 0)
+    {
+        return cities.size() * 5;
+    }
+    
+    for (int i = 0; i < cities.size(); i++)
+    {
+        string city = cnvert(cities[i]);
+        
+        if (DQ.size() < cacheSize)
+        {
+            if (uset.count(city) != 0)
+            {
+                answer += 1;
+                
+                refresh_DQ(city);
+            }
+            else
+            {
+                answer += 5;
+                
+                DQ.push_back(city);
+                uset.insert(city);
+            }
+        }
+        else if (DQ.size() == cacheSize)
+        {
+            if (uset.count(city) != 0)
+            {
+                answer += 1;
+                
+                refresh_DQ(city);
+            }
+            else
+            {
+                answer += 5;
+                
+                uset.erase(DQ.front());
+                DQ.pop_front();
+                
+                DQ.push_back(city);
+                uset.insert(city);
+            }
+        }
+    }
+    
+    return answer;
 }

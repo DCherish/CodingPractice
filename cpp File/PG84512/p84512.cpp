@@ -1,35 +1,44 @@
 #include <string>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
-vector<string> vec;
+string aeiou = "AEIOU";
+string str;
 
-string str = "AEIOU";
+int answer = 0;
 
-void makeword(string s)
+bool state = true;
+int cnt = 0;
+
+void DFS(string s)
 {
-	if (s.length() >= 5)
+    if (!state) return;
+
+	if (s.compare(str) == 0)
 	{
+		state = false;
+		answer = cnt;
+
 		return;
 	}
+    
+    if (s.length() == 5) return;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < aeiou.length(); i++)
 	{
-		string temp = s + str[i];
-		vec.push_back(temp);
-		makeword(temp);
+		if(!state) return;
+
+		cnt++;
+		DFS(s + aeiou[i]);
 	}
 }
 
 int solution(string word)
-{
-	int answer = 0;
-
-	makeword("");
-
-	answer = lower_bound(vec.begin(), vec.end(), word) - vec.begin() + 1;
-
-	return answer;
+{  
+    str = word;
+    
+    DFS("");
+    
+    return answer;
 }

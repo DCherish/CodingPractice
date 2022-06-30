@@ -24,7 +24,7 @@ bool cmp(string a, string b)
 
 				if (cnt == a_len)
 				{
-                    if (i + j + 1 == b.length()) return true;
+                    if (i + j == b.length() - 1) return true;
 					if (b[i + j + 1] != '#') return true;
 					else break;
 				}
@@ -62,10 +62,10 @@ string solution(string m, vector<string> musicinfos)
 
 	for (int i = 0; i < musicinfos.size(); i++)
 	{
-		vector<string> vec;
-
 		stringstream ss(musicinfos[i]);
 		string token;
+        
+        vector<string> vec;
 
 		while (getline(ss, token, ','))
 		{
