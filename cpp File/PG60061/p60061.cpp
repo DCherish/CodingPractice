@@ -23,7 +23,7 @@ bool check_install_pole(int x, int y)
 	if (x == N) return true;
 	if (y - 1 >= 0 && bo[x][y - 1] == true) return true;
 	if (bo[x][y] == true) return true;
-	if (pole[x + 1][y] == true) return true;
+	if (x + 1 <= N && pole[x + 1][y] == true) return true;
 
 	return false;
 }
@@ -32,7 +32,8 @@ bool check_install_bo(int x, int y)
 {
 	if (pole[x + 1][y] == true) return true;
 	if (y + 1 <= N && pole[x + 1][y + 1] == true) return true;
-	if (bo[x][y - 1] == true && bo[x][y + 1] == true) return true;
+	if (y - 1 >= 0 && bo[x][y - 1] == true
+        && y + 1 <= N && bo[x][y + 1] == true) return true;
 
 	return false;
 }
@@ -47,14 +48,15 @@ void check_delete_pole(int x, int y)
 		int ix = info_vec[i].x;
 		int iy = info_vec[i].y;
 		int ishape = info_vec[i].shape;
+        int iexist = info_vec[i].exist;
+        
+        if (iexist == -1) continue;
 
 		if (x == ix && y == iy && ishape == 0)
 		{
 			idx = i;
-			continue;
+            continue;
 		}
-
-		if (info_vec[i].exist == -1) continue;
 
 		if (ishape == 0 && check_install_pole(ix, iy) == false)
 		{
@@ -82,14 +84,15 @@ void check_delete_bo(int x, int y)
 		int ix = info_vec[i].x;
 		int iy = info_vec[i].y;
 		int ishape = info_vec[i].shape;
+        int iexist = info_vec[i].exist;
+        
+        if (iexist == -1) continue;
 
 		if (x == ix && y == iy && ishape == 1)
 		{
 			idx = i;
 			continue;
 		}
-
-		if (info_vec[i].exist == -1) continue;
 
 		if (ishape == 0 && check_install_pole(ix, iy) == false)
 		{
@@ -165,6 +168,7 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame)
 	for (int i = 0; i < info_vec.size(); i++)
 	{
 		if (info_vec[i].exist == -1) break;
+        
 		answer.push_back({ info_vec[i].y, N - info_vec[i].x, info_vec[i].shape });
 	}
 

@@ -50,9 +50,6 @@ string solution(string play_time, string adv_time, vector<string> logs)
 	int pt = cnvert(play_time);
 	int at = cnvert(adv_time);
 
-	int result_idx = 0;
-	ll result = 0;
-
 	vector<ll> timeline(pt + 1, 0);
 
 	for (int i = 0; i < logs.size(); i++)
@@ -77,8 +74,8 @@ string solution(string play_time, string adv_time, vector<string> logs)
 		timeline[i] += timeline[i - 1];
 	}
 
-	result = timeline[at - 1];
-	result_idx = 0;
+	ll result = timeline[at];
+	int result_idx = 0;
 
 	for (int i = at; i <= pt; i++)
 	{
