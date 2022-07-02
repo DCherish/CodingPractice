@@ -6,7 +6,7 @@
 
 using namespace std;
 
-struct node
+struct info
 {
     int num;
     int weight;
@@ -15,63 +15,61 @@ struct node
 class cmp
 {
 public:
-    bool operator()(node n1, node n2)
+    bool operator()(info n1, info n2)
     {
         return n1.weight > n2.weight;
     }
 };
 
-vector<node> map[201];
+vector<info> node[201];
 
 int dist[3][201]; // 0 s, 1 a, 2 b
 
-void Dijkstra(int idx, int val)
+void dijkstra(int idx, int val)
 {
-    priority_queue<node, vector<node>, cmp> PQ;
+    priority_queue<info, vector<info>, cmp> PQ;
 
     PQ.push({val, 0});
 
     while(!PQ.empty())
     {
-        int cnum = PQ.top().num;
-        int cweight = PQ.top().weight;
+        int num = PQ.top().num;
+        int weight = PQ.top().weight;
         PQ.pop();
 
-        if (dist[idx][cnum] != INT_MAX) continue;
-        dist[idx][cnum] = cweight;
+        if (dist[idx][num] != INT_MAX) continue;
+        dist[idx][num] = weight;
 
-        for (int i = 0; i < map[cnum].size(); i++)
+        for (int i = 0; i < node[num].size(); i++)
         {
-            if (dist[idx][map[cnum][i].num] != INT_MAX) continue;
-            PQ.push({map[cnum][i].num, cweight + map[cnum][i].weight});
+            if (dist[idx][node[num][i].num] != INT_MAX) continue;
+            PQ.push({node[num][i].num, weight + node[num][i].weight});
         }
     }
 }
 
-int solution(int n, int s, int a, int b, vector<vector<int>> fares) {
+int solution(int n, int s, int a, int b, vector<vector<int>> fares)
+{
     int answer = INT_MAX;
 
     for (int i = 0; i < fares.size(); i++)
     {
-        int c = fares[i][0];
-        int d = fares[i][1];
-        int f = fares[i][2];
+        int from = fares[i][0];
+        int to = fares[i][1];
+        int weight = fares[i][2];
 
-        map[c].push_back({d, f});
-        map[d].push_back({c, f});
+        node[from].push_back({to, weight});
+        node[to].push_back({from, weight});
     }
 
     for (int i = 0; i < 3; i++)
     {
-        for (int j = 1; j <= n; j++)
-        {
-            dist[i][j] = INT_MAX;
-        }
+        fill(&dist[i][0], &dist[i][n + 1], INT_MAX);
     }
 
-    Dijkstra(0, s);
-    Dijkstra(1, a);
-    Dijkstra(2, b);
+    dijkstra(0, s);
+    dijkstra(1, a);
+    dijkstra(2, b);
 
     for (int i = 1; i <= n; i++)
     {

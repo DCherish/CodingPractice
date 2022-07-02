@@ -1,70 +1,90 @@
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <queue>
 
 using namespace std;
 
-int dx[4] = { -1, 0, 1, 0 };
-int dy[4] = { 0, -1, 0, 1 };
-
-bool check(int th, int x, int y, vector<vector<string>> places)
+struct pnt
 {
-	for (int i = 0; i < 4; i++)
-	{
-		int nx = x + dx[i];
-		int ny = y + dy[i];
+    int x;
+    int y;
+    int cnt;
+};
 
-		if (nx < 0 || ny < 0 || nx >= 5 || ny >= 5) continue;
+char MAP[5][5];
+bool visited[5][5];
 
-		if (places[th][nx][ny] == 'P') return false;
-		else if (places[th][nx][ny] == 'O')
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				int nnx = nx + dx[j];
-				int nny = ny + dy[j];
+int dx[] = {-1, 1, 0, 0};
+int dy[] = {0, 0, -1, 1};
 
-				if (nnx < 0 || nny < 0 || nnx >= 5 || nny >= 5) continue;
+bool BFS(int x, int y)
+{
+    queue<pnt> Q;
+    Q.push({x, y, 0});
+    visited[x][y] = true;
+    
+    while (!Q.empty())
+    {
+        int qx = Q.front().x;
+        int qy = Q.front().y;
+        int qcnt = Q.front().cnt;
+        Q.pop();
+        
+        if (qcnt == 2) continue;
+        
+        for (int i = 0; i < 4; i++)
+        {
+            int nx = qx + dx[i];
+            int ny = qy + dy[i];
+            
+            if (nx < 0 || ny < 0 || nx >= 5 || ny >= 5) continue;
+            if (visited[nx][ny] || MAP[nx][ny] == 'X') continue;
+            
+            if (MAP[nx][ny] == 'P') return false;
+            
+            Q.push({nx, ny, qcnt + 1});
+            visited[nx][ny] = true;
+        }
+    }
+    
+    return true;
+}
 
-				if (nnx == x && nny == y) continue;
-				else
-				{
-					if (places[th][nnx][nny] == 'P') return false;
-				}
-			}
-		}
-	}
-
-	return true;
+bool check()
+{
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            if (MAP[i][j] == 'P')
+            {
+                fill(&visited[0][0], &visited[4][5], false);
+                if (!BFS(i, j)) return false;
+            }
+        }
+    }
+    
+    return true;
 }
 
 vector<int> solution(vector<vector<string>> places)
 {
-	vector<int> answer;
-
-	for (int i = 0; i < 5; i++)
-	{
-		bool state = true;
-
-		for (int j = 0; j < 5; j++)
-		{
-			for (int k = 0; k < 5; k++)
-			{
-				if (places[i][j][k] == 'P')
-				{
-					if (check(i, j, k, places) == false)
-					{
-						state = false;
-						break;
-					}
-				}
-			}
-
-			if (state == false) break;
-		}
-
-		if (state == false) answer.push_back(0);
-		else answer.push_back(1);
-	}
-
-	return answer;
+    vector<int> answer;
+    
+    for (auto vec : places)
+    {
+        for (int i = 0; i < vec.size(); i++)
+        {
+            for (int j = 0; j < vec[i].size(); j++)
+            {
+                MAP[i][j] = vec[i][j];
+            }
+        }
+        
+        if (check()) answer.push_back(1);
+        else answer.push_back(0);
+    }
+    
+    return answer;
 }

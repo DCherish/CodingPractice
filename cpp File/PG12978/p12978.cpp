@@ -7,7 +7,7 @@ using namespace std;
 
 struct info
 {
-	int idx;
+	int num;
 	int weight;
 };
 
@@ -27,21 +27,21 @@ void dijkstra()
 {
 	priority_queue<info, vector<info>, cmp> PQ;
 
-	PQ.push({ 1, 0 });
+	PQ.push({1, 0});
 
 	while (!PQ.empty())
 	{
-		int idx = PQ.top().idx;
+		int num = PQ.top().num;
 		int weight = PQ.top().weight;
 		PQ.pop();
 
-		if (dist[idx] != INT_MAX) continue;
-		dist[idx] = weight;
+		if (dist[num] != INT_MAX) continue;
+		dist[num] = weight;
 
-		for (int i = 0; i < node[idx].size(); i++)
+		for (int i = 0; i < node[num].size(); i++)
 		{
-			if (dist[node[idx][i].idx] != INT_MAX) continue;
-			PQ.push({ node[idx][i].idx, weight + node[idx][i].weight });
+			if (dist[node[num][i].num] != INT_MAX) continue;
+			PQ.push({node[num][i].num, weight + node[num][i].weight});
 		}
 	}
 }
@@ -52,12 +52,12 @@ int solution(int N, vector<vector<int>> road, int K)
 
 	for (int i = 0; i < road.size(); i++)
 	{
-		int a = road[i][0];
-		int b = road[i][1];
+		int from = road[i][0];
+		int to = road[i][1];
 		int weight = road[i][2];
 
-		node[a].push_back({ b, weight });
-		node[b].push_back({ a, weight });
+		node[from].push_back({to, weight});
+		node[to].push_back({from, weight});
 	}
 
 	fill(dist + 1, dist + N + 1, INT_MAX);
