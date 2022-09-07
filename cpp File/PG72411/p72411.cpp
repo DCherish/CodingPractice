@@ -5,56 +5,39 @@
 
 using namespace std;
 
-unordered_map<string, int> cntmap;
-unordered_map<int, string> idxmap;
+vector<char> vec;
 
-int len, num;
-string order;
+unordered_map<string, int> umap;
+int maxcnt = 0;
 
-int maxcnt;
-
-void DFS(int depth, int idx, string str)
+void solve(string str, int N, int depth, int idx)
 {
-    if (depth == len)
+    if (depth == N)
     {
-        if (cntmap.count(str) == 0)
+        vector<char> temp = vec;
+        
+        sort(temp.begin(), temp.end());
+        
+        string s = "";
+        
+        for (int i = 0; i < temp.size(); i++)
         {
-            idxmap[num] = str;
-            num++;
+            s += temp[i];
         }
         
-        cntmap[str] += 1;
+        umap[s] += 1;
         
-        maxcnt = max(maxcnt, cntmap[str]);
+        maxcnt = max(maxcnt, umap[s]);
         
         return;
     }
     
-    for (int i = idx; i < order.length(); i++)
-    {
-        DFS(depth + 1, i + 1, str + order[i]);
-    }
-}
-
-string func(string str)
-{
-    vector<char> vec;
-    
-    for (int i = 0; i < str.length(); i++)
+    for (int i = idx; i < str.length(); i++)
     {
         vec.push_back(str[i]);
+        solve(str, N, depth + 1, i + 1);
+        vec.pop_back();
     }
-    
-    sort(vec.begin(), vec.end());
-    
-    string result = "";
-    
-    for (int i = 0; i < vec.size(); i++)
-    {
-        result += vec[i];
-    }
-    
-    return result;
 }
 
 vector<string> solution(vector<string> orders, vector<int> course)
@@ -63,25 +46,21 @@ vector<string> solution(vector<string> orders, vector<int> course)
     
     for (int i = 0; i < course.size(); i++)
     {
-        len = course[i];
-        
-        cntmap.clear();
-        idxmap.clear();
-        
-        num = 1;
+        umap.clear();
         maxcnt = 0;
         
         for (int j = 0; j < orders.size(); j++)
         {
-            order = func(orders[j]);
-            DFS(0, 0, "");
+            solve(orders[j], course[i], 0, 0);
         }
         
-        for (int j = 1; j < num; j++)
+        if (maxcnt == 1) continue;
+        
+        for (auto a : umap)
         {
-            if (cntmap[idxmap[j]] == maxcnt && cntmap[idxmap[j]] > 1)
+            if (a.second == maxcnt)
             {
-                answer.push_back(idxmap[j]);
+                answer.push_back(a.first);
             }
         }
     }
