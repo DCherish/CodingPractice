@@ -7,54 +7,57 @@ using namespace std;
 
 struct info
 {
-    int idx;
+    int state;
     string id;
 };
+
+vector<info> vec;
 
 unordered_map<string, string> umap;
 
 vector<string> solution(vector<string> record)
 {
     vector<string> answer;
-    vector<info> result;
     
     for (int i = 0; i < record.size(); i++)
     {
         stringstream ss(record[i]);
         string token;
-        vector<string> vec;
+        
+        vector<string> temp;
         
         while (getline(ss, token, ' '))
         {
-            vec.push_back(token);
+            temp.push_back(token);
         }
         
-        if (vec[0].compare("Enter") == 0)
+        if (temp[0] == "Enter")
         {
-            umap[vec[1]] = vec[2];
-            result.push_back({ 0, vec[1] });
+            umap[temp[1]] = temp[2];
+            
+            vec.push_back({0, temp[1]});
         }
-        else if (vec[0].compare("Leave") == 0)
+        else if (temp[0] == "Leave")
         {
-            result.push_back({ 1, vec[1] });
+            vec.push_back({1, temp[1]});
         }
         else
         {
-            umap[vec[1]] = vec[2];
+            umap[temp[1]] = temp[2];
         }
     }
     
-    for (int i = 0; i < result.size(); i++)
+    for (int i = 0; i < vec.size(); i++)
     {
-        string str;
+        string str = umap[vec[i].id];
         
-        if (result[i].idx == 0)
+        if (vec[i].state == 0)
         {
-            str = umap[result[i].id] + "님이 들어왔습니다.";
+            str += "님이 들어왔습니다.";
         }
-        else if (result[i].idx == 1)
+        else
         {
-            str = umap[result[i].id] + "님이 나갔습니다.";
+            str += "님이 나갔습니다.";
         }
         
         answer.push_back(str);
