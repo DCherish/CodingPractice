@@ -1,50 +1,43 @@
-#include <iostream>
 #include <string>
-#include <stack>
+#include <vector>
 #include <deque>
+#include <stack>
 
 using namespace std;
 
-deque<char> DQ_1;
-deque<char> DQ_2;
-
-stack<char> S;
-
-int l_cnt;
-int r_cnt;
+deque<char> DQ_u;
+deque<char> DQ_v;
 
 string u_func();
 string v_func();
 
 string u_func()
 {
-    string answer = "";
-
-    deque<char> DQ_t;
-
+    string result = "";
+    
     bool state = true;
-
-    while (!DQ_2.empty())
+    
+    stack<char> S;
+    deque<char> DQ_t;
+    
+    while (!DQ_u.empty())
     {
-        char front = DQ_2.front();
-        DQ_2.pop_front();
-
-        DQ_t.push_back(front); // 잘라낸 식 보관
-
-        if (front == '(')
-        {
-            S.push(front);
-        }
+        char c = DQ_u.front();
+        DQ_u.pop_front();
+        
+        DQ_t.push_back(c);
+        
+        if (c == '(') S.push(c);
         else
         {
             if (S.empty())
             {
-                while (!DQ_2.empty())
+                while (!DQ_u.empty())
                 {
-                    DQ_t.push_back(DQ_2.front());
-                    DQ_2.pop_front();
+                    DQ_t.push_back(DQ_u.front());
+                    DQ_u.pop_front();
                 }
-
+                
                 state = false;
             }
             else
@@ -53,92 +46,79 @@ string u_func()
             }
         }
     }
-
-    if (state == false) // 거짓으로 판명난 경우
-    {
-        answer += "(";
-
-        answer += v_func();
-
-        answer += ")";
-
-        DQ_t.pop_front();
-
-        while(DQ_t.size() > 1)
-        {
-            char temp = DQ_t.front();
-            DQ_t.pop_front();
-
-            if (temp == '(')
-            {
-                answer += ")";
-            }
-            else
-            {
-                answer += "(";
-            }
-        }
-    }
-    else
+    
+    if (state)
     {
         while (!DQ_t.empty())
         {
             char temp = DQ_t.front();
             DQ_t.pop_front();
 
-            answer += temp;
+            result += temp;
         }
     }
-
-    return answer;
+    else
+    {
+        result += '(';
+        result += v_func();
+        result += ')';
+        
+        DQ_t.pop_front();
+        DQ_t.pop_back();
+        
+        while (!DQ_t.empty())
+        {
+            char c = DQ_t.front();
+            DQ_t.pop_front();
+            
+            if (c == '(') result += ')';
+            else result += '(';
+        }
+    }
+    
+    return result;
 }
 
 string v_func()
 {
-    string answer = "";
+    string result = "";
     
-    l_cnt = 0;
-    r_cnt = 0;
-
-    while (!DQ_1.empty())
+    int l_cnt = 0;
+    int r_cnt = 0;
+    
+    while (!DQ_v.empty())
     {
-        char front = DQ_1.front();
-        DQ_1.pop_front();
-
-        DQ_2.push_back(front); // 식에서 잘라내기
-
-        if (front == '(')
-        {
-            l_cnt++;
-        }
-        else
-        {
-            r_cnt++;
-        }
-
+        char c = DQ_v.front();
+        DQ_v.pop_front();
+        
+        DQ_u.push_back(c);
+        
+        if (c == '(') l_cnt++;
+        else r_cnt++;
+        
         if (l_cnt == r_cnt)
         {
-            answer += u_func();
-            answer += v_func();
-
+            result += u_func();
+            result += v_func();
+            
             l_cnt = 0;
             r_cnt = 0;
         }
     }
-
-    return answer;
+    
+    return result;
 }
 
 string solution(string p)
-{    
+{
     string answer = "";
-
+    
     for (int i = 0; i < p.length(); i++)
     {
-        DQ_1.push_back(p[i]); // 원래 식 입력
+        DQ_v.push_back(p[i]);
     }
-
+    
     answer += v_func();
-
+    
     return answer;
 }
