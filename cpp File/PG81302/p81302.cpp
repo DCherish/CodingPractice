@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
-#include <algorithm>
+#include <cstring>
 #include <queue>
 
 using namespace std;
@@ -15,13 +15,13 @@ struct pnt
 char MAP[5][5];
 bool visited[5][5];
 
-int dx[] = {-1, 1, 0, 0};
-int dy[] = {0, 0, -1, 1};
+int dx[] = { -1, 1, 0, 0 };
+int dy[] = { 0, 0, -1, 1 };
 
 bool BFS(int x, int y)
 {
     queue<pnt> Q;
-    Q.push({x, y, 0});
+    Q.push({ x, y, 0 });
     visited[x][y] = true;
     
     while (!Q.empty())
@@ -43,7 +43,7 @@ bool BFS(int x, int y)
             
             if (MAP[nx][ny] == 'P') return false;
             
-            Q.push({nx, ny, qcnt + 1});
+            Q.push({ nx, ny, qcnt + 1 });
             visited[nx][ny] = true;
         }
     }
@@ -59,7 +59,8 @@ bool check()
         {
             if (MAP[i][j] == 'P')
             {
-                fill(&visited[0][0], &visited[4][5], false);
+                // fill(&visited[0][0], &visited[4][5], false);
+                memset(visited, false, sizeof(visited));
                 if (!BFS(i, j)) return false;
             }
         }
