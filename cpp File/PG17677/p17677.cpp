@@ -1,128 +1,88 @@
 #include <string>
-#include <vector>
-#include <unordered_set>
-#include <unordered_map>
-#include <algorithm>
 #include <cctype>
-#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-vector<string> vec1;
-vector<string> vec2;
-
 unordered_map<string, int> umap1;
 unordered_map<string, int> umap2;
-
-unordered_set<string> visited;
-
-double samecnt, totalcnt, percent;
-
-string cnvert(string s)
-{
-    string result = "";
-    
-    for (int i = 0; i < s.length(); i++)
-    {
-        result += toupper(s[i]);
-    }
-    
-    return result;
-}
 
 int solution(string str1, string str2)
 {
     int answer = 0;
     
-    string s1 = cnvert(str1);
-    string s2 = cnvert(str2);
-    
-    for (int i = 0; i < s1.length() - 1; i++)
+    for (int i = 0; i < str1.length() - 1; i++)
     {
-        if ((s1[i] >= 'A' && s1[i] <= 'Z') &&
-            (s1[i + 1] >= 'A' && s1[i + 1] <= 'Z'))
+        char a = toupper(str1[i]);
+        char b = toupper(str1[i + 1]);
+        
+        if (a >= 'A' && a <= 'Z' && b >= 'A' && b <= 'Z')
         {
-            string temp = s1.substr(i, 2);
+            string str = "";
             
-            if (umap1.count(temp) == 0)
-            {
-                vec1.push_back(temp);
-            }
+            str += a;
+            str += b;
             
-            umap1[temp] += 1;
+            umap1[str] += 1;
         }
     }
     
-    for (int i = 0; i < s2.length() - 1; i++)
+    for (int i = 0; i < str2.length() - 1; i++)
     {
-        if ((s2[i] >= 'A' && s2[i] <= 'Z') &&
-            (s2[i + 1] >= 'A' && s2[i + 1] <= 'Z'))
+        char a = toupper(str2[i]);
+        char b = toupper(str2[i + 1]);
+        
+        if (a >= 'A' && a <= 'Z' && b >= 'A' && b <= 'Z')
         {
-            string temp = s2.substr(i, 2);
+            string str = "";
             
-            if (umap2.count(temp) == 0)
-            {
-                vec2.push_back(temp);
-            }
+            str += a;
+            str += b;
             
-            umap2[temp] += 1;
+            umap2[str] += 1;
         }
     }
     
-    for (int i = 0; i < vec1.size(); i++)
+    int mincnt = 0;
+    int maxcnt = 0;
+    
+    for (auto a : umap1)
     {
-        string word = vec1[i];
-        
-        if (visited.count(word) != 0) continue;
-        
-        visited.insert(word);
-        
-        if (umap2.count(word) != 0)
+        if (umap2.count(a.first) != 0)
         {
-            int mincnt = min(umap1[word], umap2[word]);
-            samecnt += mincnt;
+            mincnt += min(umap1[a.first], umap2[a.first]);
         }
     }
     
-    visited.clear();
-    
-    for (int i = 0; i < vec1.size(); i++)
+    for (auto a : umap1)
     {
-        string word = vec1[i];
-        
-        if (visited.count(word) != 0) continue;
-        
-        visited.insert(word);
-        
-        if (umap2.count(word) != 0)
+        if (umap2.count(a.first) == 0)
         {
-            int maxcnt = max(umap1[word], umap2[word]);
-            totalcnt += maxcnt;
+            maxcnt += umap1[a.first];
         }
         else
         {
-            totalcnt += umap1[word];
+            maxcnt += max(umap1[a.first], umap2[a.first]);
+            
+            umap2.erase(a.first);
         }
     }
     
-    for (int i = 0; i < vec2.size(); i++)
+    for (auto a : umap2)
     {
-        string word = vec2[i];
-        
-        if (visited.count(word) != 0) continue;
-        
-        totalcnt += umap2[word];
+        maxcnt += umap2[a.first];
     }
     
-    if (totalcnt == 0)
-    {
-        answer = 65536;
-    }
-    else
-    {
-        percent = samecnt / totalcnt * (double)65536;
-        answer = (int)percent;
-    }
+    if (mincnt == 0 && maxcnt == 0) return 65536;
+    
+    double result = 0;
+    
+    result = (double)mincnt / (double)maxcnt;
+    result *= 65536;
+    
+    answer = (int)result;
     
     return answer;
 }
