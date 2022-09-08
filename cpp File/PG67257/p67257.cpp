@@ -1,138 +1,124 @@
 #include <string>
 #include <vector>
-#include <cmath>
 #include <deque>
-#include <cstring>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 typedef long long ll;
 
-deque<ll> DQ;
-deque<ll> DQ_cpy;
+bool op[3];
+int cnt = 0;
 
-int oper[3];
 bool visited[3];
+
 vector<int> opvec;
+
+deque<ll> DQ;
 
 ll answer = 0;
 
-ll cal(int cnt)
+ll cal()
 {
-	DQ_cpy.clear();
-	DQ_cpy = DQ;
-
-	for (int i = 0; i < cnt; i++)
-	{
-		int j = 1;
-
-		while (j < DQ_cpy.size())
-		{
-			if (DQ_cpy[j] == opvec[i])
-			{
-				if (opvec[i] == 0)
-				{
-					DQ_cpy[j - 1] += DQ_cpy[j + 1];
-					DQ_cpy.erase(DQ_cpy.begin() + j, DQ_cpy.begin() + j + 2);
-				}
-				else if (opvec[i] == 1)
-				{
-					DQ_cpy[j - 1] -= DQ_cpy[j + 1];
-					DQ_cpy.erase(DQ_cpy.begin() + j, DQ_cpy.begin() + j + 2);
-				}
-				else if (opvec[i] == 2)
-				{
-					DQ_cpy[j - 1] *= DQ_cpy[j + 1];
-					DQ_cpy.erase(DQ_cpy.begin() + j, DQ_cpy.begin() + j + 2);
-				}
-			}
-			else j += 2;
-		}
-	}
-
-	return abs(DQ_cpy.front());
+    deque<ll> DQ_copy = DQ;
+    
+    for (int i = 0; i < cnt; i++)
+    {
+        int j = 1;
+        
+        while (j < DQ_copy.size())
+        {
+            if (DQ_copy[j] == opvec[i])
+            {
+                if (opvec[i] == 0)
+                {
+                    DQ_copy[j - 1] += DQ_copy[j + 1];
+                    DQ_copy.erase(DQ_copy.begin() + j, DQ_copy.begin() + j + 2);
+                }
+                else if (opvec[i] == 1)
+                {
+                    DQ_copy[j - 1] -= DQ_copy[j + 1];
+                    DQ_copy.erase(DQ_copy.begin() + j, DQ_copy.begin() + j + 2);
+                }
+                else
+                {
+                    DQ_copy[j - 1] *= DQ_copy[j + 1];
+                    DQ_copy.erase(DQ_copy.begin() + j, DQ_copy.begin() + j + 2);
+                }
+            }
+            else j += 2;
+        }
+    }
+    
+    return abs(DQ_copy.front());
 }
 
-void DFS(int cnt, int depth)
+void solve(int depth)
 {
-	if (cnt == depth)
-	{
-		answer = max(answer, cal(cnt));
-		return;
-	}
-
-	for (int i = 0; i < 3; i++)
-	{
-		if (oper[i] == 0) continue;
-		if (visited[i] == true) continue;
-
-		visited[i] = true;
-		opvec.push_back(i);
-
-		DFS(cnt, depth + 1);
-
-		opvec.pop_back();
-		visited[i] = false;
-
-	}
+    if (cnt == depth)
+    {
+        answer = max(answer, cal());
+        return;
+    }
+    
+    for (int i = 0; i < 3; i++)
+    {
+        if (!op[i]) continue;
+        if (visited[i]) continue;
+        
+        visited[i] = true;
+        opvec.push_back(i);
+        
+        solve(depth + 1);
+        
+        opvec.pop_back();
+        visited[i] = false;
+    }
 }
 
 ll solution(string expression)
 {
-	memset(oper, 0, sizeof(oper));
-	memset(visited, false, sizeof(visited));
-
-	string str = "";
-
-	for (int i = 0; i < expression.length();)
-	{
-		if (expression[i] == '+')
-		{
-			oper[0]++;
-			DQ.push_back(0);
-			i++;
-		}
-		else if (expression[i] == '-')
-		{
-			oper[1]++;
-			DQ.push_back(1);
-			i++;
-		}
-		else if (expression[i] == '*')
-		{
-			oper[2]++;
-			DQ.push_back(2);
-			i++;
-		}
-		else
-		{
-			string str = "";
-			ll sum = 0;
-
-			while (expression[i] >= '0' && expression[i] <= '9')
+    for (int i = 0; i < expression.length();)
+    {
+        if (expression[i] == '+')
+        {
+            op[0] = true;
+            DQ.push_back(0);
+            i++;
+        }
+        else if (expression[i] == '-')
+        {
+            op[1] = true;
+            DQ.push_back(1);
+            i++;
+        }
+        else if (expression[i] == '*')
+        {
+            op[2] = true;
+            DQ.push_back(2);
+            i++;
+        }
+        else
+        {
+            ll num = 0;
+            
+            while (expression[i] >= '0' && expression[i] <= '9')
 			{
-				str += expression[i];
+                num *= 10;
+                num += (ll)(expression[i] - '0');
 				i++;
 			}
 
-			for (int j = 0; j < str.length(); j++)
-			{
-				sum *= 10;
-				sum += (ll)str[j] - (ll)'0';
-			}
-
-			DQ.push_back(sum);
-		}
-	}
-
-	int cnt = 0;
+			DQ.push_back(num);
+        }
+    }
 
 	for (int i = 0; i < 3; i++)
 	{
-		if (oper[i] != 0) cnt++;
+		if (op[i]) cnt++;
 	}
 
-	DFS(cnt, 0);
-
-	return answer;
+	solve(0);
+    
+    return answer;
 }
