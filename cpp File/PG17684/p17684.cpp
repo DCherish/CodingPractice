@@ -1,10 +1,10 @@
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 using namespace std;
 
-map<string, int> alpha;
+unordered_map<string, int> alpha;
 
 int idx;
 
@@ -14,7 +14,7 @@ void init()
 	{
 		string str = "";
 
-		str += (char)(65 + i - 1);
+		str += (char)('A' + i - 1);
 
 		alpha[str] = i;
 	}
@@ -28,29 +28,29 @@ vector<int> solution(string msg)
 
 	init();
 
-	string str = "";
-	str += msg[0];
-
-	string prev;
-
-	for (int i = 1; i < msg.length(); i++)
-	{
-		prev = str;
-		str += msg[i];
-
-		if (alpha.count(str) == 0)
-		{
-			answer.push_back(alpha[prev]);
-
-			alpha[str] = idx;
-			idx++;
-
-			str = "";
-			str += msg[i];
-		}
-	}
-
-	answer.push_back(alpha[str]);
+	string prev = "";
+    
+    string str = "";
+    str += msg[0];
+    
+    for (int i = 1; i < msg.length(); i++)
+    {
+        prev = str;
+        str += msg[i];
+        
+        if (alpha.count(str) == 0)
+        {
+            answer.push_back(alpha[prev]);
+            
+            alpha[str] = idx;
+            idx++;
+            
+            str = "";
+            str += msg[i];
+        }
+    }
+    
+    answer.push_back(alpha[str]);
 
 	return answer;
 }
