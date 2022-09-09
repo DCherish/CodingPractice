@@ -1,14 +1,14 @@
 #include <string>
 #include <vector>
-#include <cctype>
 #include <algorithm>
+#include <cctype>
 
 using namespace std;
 
 struct info
 {
     string head;
-    int number;
+    int num;
     int idx;
 };
 
@@ -18,25 +18,13 @@ bool cmp(info a, info b)
 {
     if (a.head == b.head)
     {
-        if (a.number == b.number)
+        if (a.num == b.num)
         {
             return a.idx < b.idx;
         }
-        return a.number < b.number;
+        else return a.num < b.num;
     }
-    return a.head < b.head;
-}
-
-string cnvert(string s)
-{
-    string result = "";
-    
-    for (int i = 0; i < s.length(); i++)
-    {
-        result += tolower(s[i]);
-    }
-    
-    return result;
+    else return a.head < b.head;
 }
 
 vector<string> solution(vector<string> files)
@@ -45,32 +33,39 @@ vector<string> solution(vector<string> files)
     
     for (int i = 0; i < files.size(); i++)
     {
-        int x, y;
-        int j;
+        string file = files[i];
         
-        for (j = 0; j < files[i].length(); j++)
+        string head = "";
+        string num = "";
+        
+        int idx = 0;
+        
+        for (int j = idx; j < file.length(); j++)
         {
-            if (files[i][j] >= '0' && files[i][j] <= '9')
+            if (file[j] >= '0' && file[j] <= '9')
             {
-                x = j;
+                idx = j;
+                break;
+            }
+            else
+            {
+                head += tolower(file[j]);
+            }
+        }
+        
+        for (int j = idx; j < file.length(); j++)
+        {
+            if (file[j] >= '0' && file[j] <= '9')
+            {
+                num += file[j];
+            }
+            else
+            {
                 break;
             }
         }
         
-        for (j = x; j < files[i].length(); j++)
-        {
-            if (files[i][j] < '0' || files[i][j] > '9')
-            {
-                break;
-            }
-        }
-        
-        y = j;
-        
-        string h = cnvert(files[i].substr(0, x));
-        int n = stoi(files[i].substr(x, (y - x)));
-        
-        vec.push_back({ h, n, i });
+        vec.push_back({ head, stoi(num), i });
     }
     
     sort(vec.begin(), vec.end(), cmp);
