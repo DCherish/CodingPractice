@@ -8,24 +8,22 @@ int maxcost = 0;
 
 bool cmp(string a, string b)
 {
-    int a_len = a.length();
-    int cnt;
-    
     for (int i = 0; i < b.length(); i++)
     {
-        cnt = 0;
+        int cnt = 0;
         
-        for (int j = 0; j < a_len; j++)
+        while (true)
         {
-            if (i + j < b.length() && a[j] == b[i + j])
+            if (a[cnt] == b[i + cnt] && i + cnt < b.length())
             {
                 cnt++;
                 
-                if (cnt == a_len)
+                if (cnt == a.length())
                 {
-                    if (i + j == b.length() - 1) return true;
-                    if (b[i + j + 1] != '#') return true;
-                    else break;
+                    if (i + cnt == b.length()) return true;
+                    if (b[i + cnt] != '#') return true;
+                    
+                    break;
                 }
             }
             else break;
