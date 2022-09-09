@@ -8,9 +8,9 @@ int col;
 
 vector<int> vec;
 
-void DFS(int len, int depth, int idx, int visited, vector<vector<string>> &relation)
+void solve(int N, int depth, int idx, int visited, vector<vector<string>> &relation)
 {
-    if (len == depth)
+    if (N == depth)
     {
         for (int i = 0; i < vec.size(); i++)
         {
@@ -28,6 +28,7 @@ void DFS(int len, int depth, int idx, int visited, vector<vector<string>> &relat
                 if ((visited & (1 << j)) != 0)
                 {
                     str += relation[i][j];
+                    str += '/';
                 }
             }
             
@@ -43,7 +44,7 @@ void DFS(int len, int depth, int idx, int visited, vector<vector<string>> &relat
     
     for (int i = idx; i < col; i++)
     {
-        DFS(len, depth + 1, i + 1, visited + (1 << i), relation);
+        solve(N, depth + 1, i + 1, visited + (1 << i), relation);
     }
 }
 
@@ -55,7 +56,7 @@ int solution(vector<vector<string>> relation)
     
     for (int i = 1; i <= col; i++)
     {
-        DFS(i, 0, 0, 0, relation);
+        solve(i, 0, 0, 0, relation);
     }
     
     answer = vec.size();
