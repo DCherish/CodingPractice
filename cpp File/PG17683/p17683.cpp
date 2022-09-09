@@ -73,8 +73,7 @@ string solution(string m, vector<string> musicinfos)
             idx++;
             
             if (idx == temp[3].length()) idx = 0;
-            
-            if (temp[3][idx] == '#') sharp_cnt++;
+            else if (temp[3][idx] == '#') sharp_cnt++;
         }
         
         if (cmp(m, music))
