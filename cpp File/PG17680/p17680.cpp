@@ -1,14 +1,14 @@
 #include <string>
 #include <vector>
+#include <cctype>
 #include <deque>
 #include <unordered_set>
-#include <cctype>
 
 using namespace std;
 
-unordered_set<string> uset;
-
 deque<string> DQ;
+
+unordered_set<string> uset;
 
 void refresh_DQ(string s)
 {
@@ -23,13 +23,13 @@ void refresh_DQ(string s)
     }
 }
 
-string cnvert(string str)
+string cnvert(string s)
 {
     string result = "";
     
-    for (int i = 0; i < str.length(); i++)
+    for (int i = 0; i < s.length(); i++)
     {
-        result += tolower(str[i]);
+        result += tolower(s[i]);
     }
     
     return result;
@@ -39,38 +39,26 @@ int solution(int cacheSize, vector<string> cities)
 {
     int answer = 0;
     
-    if (cacheSize == 0)
-    {
-        return cities.size() * 5;
-    }
+    if (cacheSize == 0) return cities.size() * 5;
     
     for (int i = 0; i < cities.size(); i++)
     {
         string city = cnvert(cities[i]);
         
-        if (DQ.size() < cacheSize)
+        if (uset.count(city) != 0)
         {
-            if (uset.count(city) != 0)
-            {
-                answer += 1;
+            answer += 1;
                 
-                refresh_DQ(city);
-            }
-            else
+            refresh_DQ(city);
+        }
+        else
+        {
+            if (DQ.size() < cacheSize)
             {
                 answer += 5;
                 
-                DQ.push_back(city);
                 uset.insert(city);
-            }
-        }
-        else if (DQ.size() == cacheSize)
-        {
-            if (uset.count(city) != 0)
-            {
-                answer += 1;
-                
-                refresh_DQ(city);
+                DQ.push_back(city);
             }
             else
             {
@@ -79,8 +67,8 @@ int solution(int cacheSize, vector<string> cities)
                 uset.erase(DQ.front());
                 DQ.pop_front();
                 
-                DQ.push_back(city);
                 uset.insert(city);
+                DQ.push_back(city);
             }
         }
     }
