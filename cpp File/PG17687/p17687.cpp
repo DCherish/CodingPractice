@@ -3,46 +3,66 @@
 
 using namespace std;
 
-string num[17] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
+string s[17] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
 
 int N;
-int temp = 0;
-int cnt = 1;
 
-string cnvert(int idx)
+string cnvert(int num)
 {
-	if (idx < N) return num[idx];
-
-	int front = idx / N;
-	int back = idx % N;
-
-	return cnvert(front) + cnvert(back);
+    if (num < N) return s[num];
+    
+    int front = num / N;
+    int back = num % N;
+    
+    return cnvert(front) + cnvert(back);
 }
+
+// string cnvert(int num)
+// {
+//     string result = "";
+    
+//     while (num / N != 0)
+//     {
+//         string temp = result;
+//         result = s[num % N];
+//         result += temp;
+        
+//         num /= N;
+//     }
+    
+//     string temp = result;
+//     result = s[num % N];
+//     result += temp;
+    
+//     return result;
+// }
 
 string solution(int n, int t, int m, int p)
 {
-	string answer = "";
-
-	N = n;
-
-	while (true)
-	{
-		string str = cnvert(temp);
-
-		for (int i = 0; i < str.length(); i++)
-		{
-			if (cnt == p)
-			{
-				answer += str[i];
-			}
-
-			cnt++;
-
-			if (cnt > m) cnt = 1;
-
-			if (answer.length() == t) return answer;
-		}
-
-		temp++;
-	}
+    string answer = "";
+    
+    N = n;
+    
+    int num = 0;
+    int idx = 1;
+    
+    while (true)
+    {
+        string str = cnvert(num);
+        
+        for (int i = 0; i < str.length(); i++)
+        {
+            if (idx == p) answer += str[i];
+            
+            idx++;
+            
+            if (idx > m) idx = 1;
+            
+            if (answer.length() == t) return answer;
+        }
+        
+        num++;
+    }
+    
+    return answer;
 }
