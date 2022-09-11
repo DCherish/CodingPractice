@@ -6,8 +6,8 @@ using namespace std;
 
 bool visited[10];
 
-vector<string> uvec;
-vector<string> bvec;
+vector<string> uid;
+vector<string> bid;
 
 unordered_set<string> uset;
 
@@ -28,16 +28,13 @@ bool check(string a, string b)
 
 void solve(int depth)
 {
-    if (depth == bvec.size())
+    if (depth == bid.size())
     {
         string str = "";
         
-        for (int i = 0; i < uvec.size(); i++)
+        for (int i = 0; i < uid.size(); i++)
         {
-            if (visited[i])
-            {
-                str += (to_string(i) + "/");
-            }
+            if (visited[i]) str += (to_string(i) + "/");
         }
         
         if (uset.count(str) == 0)
@@ -49,11 +46,11 @@ void solve(int depth)
         return;
     }
     
-    for (int i = 0; i < uvec.size(); i++)
+    for (int i = 0; i < uid.size(); i++)
     {
         if (visited[i]) continue;
         
-        if (check(uvec[i], bvec[depth]))
+        if (check(uid[i], bid[depth]))
         {
             visited[i] = true;
             solve(depth + 1);
@@ -66,8 +63,8 @@ int solution(vector<string> user_id, vector<string> banned_id)
 {
     int answer = 0;
     
-    uvec = user_id;
-    bvec = banned_id;
+    uid = user_id;
+    bid = banned_id;
     
     solve(0);
     
