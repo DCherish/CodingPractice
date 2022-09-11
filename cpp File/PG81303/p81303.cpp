@@ -7,8 +7,8 @@ using namespace std;
 struct Node
 {
 	int data;
-	Node* prev;
-	Node* next;
+	Node *prev;
+	Node *next;
 
 	Node(int d)
 	{
@@ -20,8 +20,8 @@ struct Node
 
 struct LinkedList
 {
-	Node* head;
-	Node* tail;
+	Node *head;
+	Node *tail;
 
 	LinkedList()
 	{
@@ -30,28 +30,28 @@ struct LinkedList
 	}
 
 	void Insert(int d);
-	Node* Erase(Node* node);
-	void Restore(Node* node);
+	Node *Erase(Node *node);
+	void Restore(Node *node);
 };
 
 void LinkedList::Insert(int d)
 {
 	if (head == NULL)
 	{
-		Node* newnode = new Node(d);
+		Node *newnode = new Node(d);
 		head = newnode;
 		tail = newnode;
 	}
 	else
 	{
-		Node* newnode = new Node(d);
+		Node *newnode = new Node(d);
 		newnode->prev = tail;
 		tail->next = newnode;
 		tail = newnode;
 	}
 }
 
-Node* LinkedList::Erase(Node* node)
+Node *LinkedList::Erase(Node *node)
 {
 	if (node == head)
 	{
@@ -73,7 +73,7 @@ Node* LinkedList::Erase(Node* node)
 	}
 }
 
-void LinkedList::Restore(Node* node)
+void LinkedList::Restore(Node *node)
 {
 	if (node->prev == NULL)
 	{
@@ -93,13 +93,16 @@ void LinkedList::Restore(Node* node)
 }
 
 stack<Node*> Delete;
-LinkedList* List;
+LinkedList *List;
 
 string solve(int n, int k, vector<string> cmd)
 {
-	Node* pnt = List->head;
+	Node *pnt = List->head;
 
-	for (int i = 0; i < k; i++) pnt = pnt->next;
+	for (int i = 0; i < k; i++)
+    {
+        pnt = pnt->next;
+    }
 
 	for (int i = 0; i < cmd.size(); i++)
 	{
@@ -108,14 +111,20 @@ string solve(int n, int k, vector<string> cmd)
 			string sx = cmd[i].substr(2);
 			int x = stoi(sx);
 
-			for (int i = 0; i < x; i++) pnt = pnt->prev;
+			for (int i = 0; i < x; i++)
+            {
+                pnt = pnt->prev;
+            }
 		}
 		else if (cmd[i][0] == 'D')
 		{
 			string sx = cmd[i].substr(2);
 			int x = stoi(sx);
 
-			for (int i = 0; i < x; i++) pnt = pnt->next;
+			for (int i = 0; i < x; i++)
+            {
+                pnt = pnt->next;
+            }
 		}
 		else if (cmd[i][0] == 'C')
 		{
@@ -124,7 +133,7 @@ string solve(int n, int k, vector<string> cmd)
 		}
 		else if (cmd[i][0] == 'Z')
 		{
-			Node* Z = Delete.top();
+			Node *Z = Delete.top();
 			Delete.pop();
 			List->Restore(Z);
 		}
@@ -132,11 +141,14 @@ string solve(int n, int k, vector<string> cmd)
 
 	string result = "";
 
-	for (int i = 0; i < n; i++) result += 'O';
+	for (int i = 0; i < n; i++)
+    {
+        result += 'O';
+    }
 
 	while (!Delete.empty())
 	{
-		Node* temp = Delete.top();
+		Node *temp = Delete.top();
 		Delete.pop();
 
 		int idx = temp->data;
