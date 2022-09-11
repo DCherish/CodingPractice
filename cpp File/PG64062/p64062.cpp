@@ -6,7 +6,7 @@ using namespace std;
 
 int l, r, mid;
 
-bool check(int num, vector<int>& stones, int& k)
+bool check(int num, vector<int> &stones, int &k)
 {
 	int jmp = 0;
 

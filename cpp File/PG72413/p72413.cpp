@@ -15,35 +15,35 @@ struct info
 class cmp
 {
 public:
-    bool operator()(info n1, info n2)
+    bool operator()(info a, info b)
     {
-        return n1.weight > n2.weight;
+        return a.weight > b.weight;
     }
 };
 
 vector<info> node[201];
 
-int dist[3][201]; // 0 s, 1 a, 2 b
+int dist[3][201];
 
-void dijkstra(int idx, int val)
+void dijkstra(int idx, int num)
 {
-    priority_queue<info, vector<info>, cmp> PQ;
-
-    PQ.push({val, 0});
-
-    while(!PQ.empty())
+    priority_queue<info, vector<info>, cmp> pq;
+    
+    pq.push({ num, 0 });
+    
+    while (!pq.empty())
     {
-        int num = PQ.top().num;
-        int weight = PQ.top().weight;
-        PQ.pop();
-
-        if (dist[idx][num] != INT_MAX) continue;
-        dist[idx][num] = weight;
-
-        for (int i = 0; i < node[num].size(); i++)
+        int n = pq.top().num;
+        int w = pq.top().weight;
+        pq.pop();
+        
+        if (dist[idx][n] != INT_MAX) continue;
+        dist[idx][n] = w;
+        
+        for (int i = 0; i < node[n].size(); i++)
         {
-            if (dist[idx][node[num][i].num] != INT_MAX) continue;
-            PQ.push({node[num][i].num, weight + node[num][i].weight});
+            if (dist[idx][node[n][i].num] != INT_MAX) continue;
+            pq.push({ node[n][i].num, w + node[n][i].weight });
         }
     }
 }
@@ -51,30 +51,27 @@ void dijkstra(int idx, int val)
 int solution(int n, int s, int a, int b, vector<vector<int>> fares)
 {
     int answer = INT_MAX;
-
+    
     for (int i = 0; i < fares.size(); i++)
     {
         int from = fares[i][0];
         int to = fares[i][1];
         int weight = fares[i][2];
-
-        node[from].push_back({to, weight});
-        node[to].push_back({from, weight});
+        
+        node[from].push_back({ to, weight });
+        node[to].push_back({ from, weight });
     }
-
-    for (int i = 0; i < 3; i++)
-    {
-        fill(&dist[i][0], &dist[i][n + 1], INT_MAX);
-    }
-
+    
+    fill(&dist[0][0], &dist[2][n + 1], INT_MAX);
+    
     dijkstra(0, s);
     dijkstra(1, a);
     dijkstra(2, b);
-
+    
     for (int i = 1; i <= n; i++)
     {
         answer = min(answer, dist[0][i] + dist[1][i] + dist[2][i]);
     }
-
+    
     return answer;
 }
