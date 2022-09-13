@@ -6,108 +6,99 @@ using namespace std;
 
 bool cmp(string s1, string s2)
 {
-	if (s1.length() == s2.length())
-	{
-		return s1 < s2;
-	}
-	else return s1.length() < s2.length();
+    if (s1.length() == s2.length())
+    {
+        return s1 < s2;
+    }
+    else return s1.length() < s2.length();
 }
 
-vector<int> solution(vector<string> words, vector<string> queries) {
-	vector<int> answer;
+vector<int> solution(vector<string> words, vector<string> queries)
+{
+    vector<int> answer;
 
-	vector<string> strvec = words;
-	vector<string> r_strvec;
+    vector<string> strvec = words;
+    vector<string> r_strvec;
 
-	int cnt = 0;
+    int cnt = 0;
 
-	for (int i = 0; i < words.size(); i++)
-	{
-		string str = "";
+    for (int i = 0; i < words.size(); i++)
+    {
+        string str = "";
 
-		for (int j = words[i].length() - 1; j >= 0; j--)
-		{
-			str += words[i][j];
-		}
+        for (int j = words[i].length() - 1; j >= 0; j--)
+        {
+            str += words[i][j];
+        }
 
-		r_strvec.push_back(str);
-	}
+        r_strvec.push_back(str);
+    }
 
-	sort(strvec.begin(), strvec.end(), cmp);
-	sort(r_strvec.begin(), r_strvec.end(), cmp);
+    sort(strvec.begin(), strvec.end(), cmp);
+    sort(r_strvec.begin(), r_strvec.end(), cmp);
 
-	for (int i = 0; i < queries.size(); i++)
-	{
-		int hi, lo;
+    for (int i = 0; i < queries.size(); i++)
+    {
+        int hi, lo;
+        
+        string temp = "";
+        string temp2 = "";
 
-		if (queries[i][0] == '?') // ?�� ������ ���
-		{
-			string temp = "";
-			string temp2 = "";
+        if (queries[i][0] == '?') // ?로 시작할 경우
+        {
+            for (int j = queries[i].length() - 1; j >= 0; j--)
+            {
+                if (queries[i][j] != '?') temp += queries[i][j];
+                else break;
+            }
 
-			for (int j = queries[i].length() - 1; j >= 0; j--)
-			{
-				if (queries[i][j] != '?')
-				{
-					temp += queries[i][j];
-				}
-				else break;
-			}
+            temp2 = temp;
 
-			temp2 = temp;
+            while (temp2.length() != queries[i].length())
+            {
+                temp2 += "z";
+            }
 
-			while (temp2.length() != queries[i].length())
-			{
-				temp2 += "z";
-			}
+            hi = upper_bound(r_strvec.begin(), r_strvec.end(), temp2, cmp) - r_strvec.begin();
 
-			hi = upper_bound(r_strvec.begin(), r_strvec.end(), temp2, cmp) - r_strvec.begin();
+            temp2 = temp;
 
-			temp2 = temp;
+            while (temp2.length() != queries[i].length())
+            {
+                temp2 += "a";
+            }
 
-			while (temp2.length() != queries[i].length())
-			{
-				temp2 += "a";
-			}
+            lo = lower_bound(r_strvec.begin(), r_strvec.end(), temp2, cmp) - r_strvec.begin();
+        }
+        else // ?로 시작하지 않을 경우
+        {
+            for (int j = 0; j < queries[i].length(); j++)
+            {
+                if (queries[i][j] != '?') temp += queries[i][j];
+                else break;
+            }
 
-			lo = lower_bound(r_strvec.begin(), r_strvec.end(), temp2, cmp) - r_strvec.begin();
-		}
-		else // ?�� �������� ���� ���
-		{
-			string temp = "";
-			string temp2 = "";
+            temp2 = temp;
 
-			for (int j = 0; j < queries[i].length(); j++)
-			{
-				if (queries[i][j] != '?')
-				{
-					temp += queries[i][j];
-				}
+            while (temp2.length() != queries[i].length())
+            {
+                temp2 += "z";
+            }
 
-				else break;
-			}
+            hi = upper_bound(strvec.begin(), strvec.end(), temp2, cmp) - strvec.begin();
 
-			temp2 = temp;
+            temp2 = temp;
 
-			while (temp2.length() != queries[i].length())
-			{
-				temp2 += "z";
-			}
+            while (temp2.length() != queries[i].length())
+            {
+                temp2 += "a";
+            }
 
-			hi = upper_bound(strvec.begin(), strvec.end(), temp2, cmp) - strvec.begin();
+            lo = lower_bound(strvec.begin(), strvec.end(), temp2, cmp) - strvec.begin();
+        }
 
-			temp2 = temp;
+        answer.push_back(hi - lo);
+    }
 
-			while (temp2.length() != queries[i].length())
-			{
-				temp2 += "a";
-			}
-
-			lo = lower_bound(strvec.begin(), strvec.end(), temp2, cmp) - strvec.begin();
-		}
-
-		answer.push_back(hi - lo);
-	}
-
-	return answer;
+    return answer;
 }
