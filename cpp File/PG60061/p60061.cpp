@@ -9,69 +9,45 @@ struct info
 	int x;
 	int y;
 	int shape;
-	int exist;
+	bool exist;
 };
 
 int N;
-int pole[110][110];
-int bo[110][110];
 
-vector<info> info_vec;
+bool pole[110][110];
+bool bo[110][110];
 
-bool check_install_pole(int x, int y)
+vector<info> vec;
+
+bool cmp(vector<int> &a, vector<int> &b)
 {
-	if (x == N) return true;
-	if (y - 1 >= 0 && bo[x][y - 1] == true) return true;
-	if (bo[x][y] == true) return true;
-	if (x + 1 <= N && pole[x + 1][y] == true) return true;
-
-	return false;
+	if (a[0] == b[0])
+	{
+		if (a[1] == b[1])
+		{
+			return a[2] < b[2];
+		}
+		else return a[1] < b[1];
+	}
+	else return a[0] < b[0];
 }
 
 bool check_install_bo(int x, int y)
 {
-	if (pole[x + 1][y] == true) return true;
-	if (y + 1 <= N && pole[x + 1][y + 1] == true) return true;
-	if (y - 1 >= 0 && bo[x][y - 1] == true
-        && y + 1 <= N && bo[x][y + 1] == true) return true;
-
-	return false;
+    if (pole[x + 1][y] || pole[x + 1][y + 1]) return true;
+    if (bo[x][y - 1] && bo[x][y + 1]) return true;
+    
+    return false;
 }
 
-void check_delete_pole(int x, int y)
+bool check_install_pole(int x, int y)
 {
-	int idx = 0;
-	pole[x][y] = false;
-
-	for (int i = 0; i < info_vec.size(); i++)
-	{
-		int ix = info_vec[i].x;
-		int iy = info_vec[i].y;
-		int ishape = info_vec[i].shape;
-        int iexist = info_vec[i].exist;
-        
-        if (iexist == -1) continue;
-
-		if (x == ix && y == iy && ishape == 0)
-		{
-			idx = i;
-            continue;
-		}
-
-		if (ishape == 0 && check_install_pole(ix, iy) == false)
-		{
-			pole[x][y] = true;
-			return;
-		}
-
-		if (ishape == 1 && check_install_bo(ix, iy) == false)
-		{
-			pole[x][y] = true;
-			return;
-		}
-	}
-
-	info_vec[idx].exist = -1;
+    if (x == N) return true;
+    
+    if (bo[x][y - 1] || bo[x][y]) return true;
+    if (pole[x + 1][y]) return true;
+    
+    return false;
 }
 
 void check_delete_bo(int x, int y)
@@ -79,14 +55,14 @@ void check_delete_bo(int x, int y)
 	int idx = 0;
 	bo[x][y] = false;
 
-	for (int i = 0; i < info_vec.size(); i++)
+	for (int i = 0; i < vec.size(); i++)
 	{
-		int ix = info_vec[i].x;
-		int iy = info_vec[i].y;
-		int ishape = info_vec[i].shape;
-        int iexist = info_vec[i].exist;
+		int ix = vec[i].x;
+		int iy = vec[i].y;
+		int ishape = vec[i].shape;
+        int iexist = vec[i].exist;
         
-        if (iexist == -1) continue;
+        if (!iexist) continue;
 
 		if (x == ix && y == iy && ishape == 1)
 		{
@@ -107,24 +83,43 @@ void check_delete_bo(int x, int y)
 		}
 	}
 
-	info_vec[idx].exist = -1;
+	vec[idx].exist = false;
 }
 
-bool cmp(info a, info b)
+void check_delete_pole(int x, int y)
 {
-	if (a.exist == b.exist)
+	int idx = 0;
+	pole[x][y] = false;
+
+	for (int i = 0; i < vec.size(); i++)
 	{
-		if (a.y == b.y)
+		int ix = vec[i].x;
+		int iy = vec[i].y;
+		int ishape = vec[i].shape;
+        int iexist = vec[i].exist;
+        
+        if (!iexist) continue;
+
+		if (x == ix && y == iy && ishape == 0)
 		{
-			if (a.x == b.x)
-			{
-				return a.shape < b.shape;
-			}
-			else return a.x >= b.x;
+			idx = i;
+            continue;
 		}
-		else return a.y <= b.y;
+
+		if (ishape == 0 && check_install_pole(ix, iy) == false)
+		{
+			pole[x][y] = true;
+			return;
+		}
+
+		if (ishape == 1 && check_install_bo(ix, iy) == false)
+		{
+			pole[x][y] = true;
+			return;
+		}
 	}
-	else return a.exist >= b.exist;
+
+	vec[idx].exist = false;
 }
 
 vector<vector<int>> solution(int n, vector<vector<int>> build_frame)
@@ -144,16 +139,22 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame)
 
 		if (install == 1)
 		{
-			if (shape == 0 && check_install_pole(x, y) == true)
+			if (shape == 0)
 			{
-				info_vec.push_back({ x, y, shape, 1 });
-				pole[x][y] = 1;
+				if (check_install_pole(x, y))
+				{
+					pole[x][y] = true;
+					vec.push_back({ x, y, shape, true });
+				}
 			}
 
-			if (shape == 1 && check_install_bo(x, y) == true)
+			if (shape == 1)
 			{
-				info_vec.push_back({ x, y, shape, 1 });
-				bo[x][y] = 1;
+				if (check_install_bo(x, y))
+				{
+					bo[x][y] = true;
+					vec.push_back({ x, y, shape, true });
+				}
 			}
 		}
 		else
@@ -163,14 +164,14 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame)
 		}
 	}
 
-	sort(info_vec.begin(), info_vec.end(), cmp);
-
-	for (int i = 0; i < info_vec.size(); i++)
+	for (int i = 0; i < vec.size(); i++)
 	{
-		if (info_vec[i].exist == -1) break;
+		if (!vec[i].exist) continue;
         
-		answer.push_back({ info_vec[i].y, N - info_vec[i].x, info_vec[i].shape });
+		answer.push_back({ vec[i].y, N - vec[i].x, vec[i].shape });
 	}
+
+	sort(answer.begin(), answer.end(), cmp);
 
 	return answer;
 }
