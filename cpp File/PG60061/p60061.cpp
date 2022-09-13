@@ -135,7 +135,7 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame)
 		int shape = build_frame[i][2];
 		int install = build_frame[i][3];
 
-		x = n - x;
+		x = N - x;
 
 		if (install == 1)
 		{
