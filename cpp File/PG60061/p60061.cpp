@@ -135,26 +135,20 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame)
 		int shape = build_frame[i][2];
 		int install = build_frame[i][3];
 
-		x = N - x;
+		x = n - x;
 
 		if (install == 1)
 		{
-			if (shape == 0)
+			if (shape == 0 && check_install_pole(x, y))
 			{
-				if (check_install_pole(x, y))
-				{
-					pole[x][y] = true;
-					vec.push_back({ x, y, shape, true });
-				}
+				pole[x][y] = true;
+				vec.push_back({ x, y, shape, true });
 			}
 
-			if (shape == 1)
+			if (shape == 1 && check_install_bo(x, y))
 			{
-				if (check_install_bo(x, y))
-				{
-					bo[x][y] = true;
-					vec.push_back({ x, y, shape, true });
-				}
+				bo[x][y] = true;
+				vec.push_back({ x, y, shape, true });
 			}
 		}
 		else
