@@ -8,8 +8,10 @@ int dx[5][6], dy[5][6];
 
 void pre_setting()
 {
-	// 0 1 2 3 4 ; only 5 figure
-	// 0 1 2 3 ; color pnt // 4 5 ; black pnt
+    // [x][y] = num
+	// x ; 5 figure only can fill with black // 0 1 2 3 4
+	// y ; 0 1 2 3 ; color pnt // 4 5 ; black pnt
+    // num ; x or y plus num
 
 	dx[0][0] = 0; dx[0][1] = 1; dx[0][2] = 1; dx[0][3] = 1; dx[0][4] = 0; dx[0][5] = 0;
 	dy[0][0] = 0; dy[0][1] = 0; dy[0][2] = 1; dy[0][3] = 2; dy[0][4] = 1; dy[0][5] = 2;
@@ -27,15 +29,15 @@ void pre_setting()
 	dy[4][0] = 0; dy[4][1] = -1; dy[4][2] = 0; dy[4][3] = 1; dy[4][4] = -1; dy[4][5] = 1;
 }
 
-int check(int x, int y, vector<vector<int>> board)
+int check(int x, int y, vector<vector<int>> &board)
 {
 	int value = board[x][y];
 
-	for (int i = 0; i < 5; i++) // ´Ù¼¸°³ Áß ÇØ´çÇÏ´ÂÁö?
+	for (int i = 0; i < 5; i++) // ë‹¤ì„¯ê°œ ì¤‘ í•´ë‹¹í•˜ëŠ”ì§€?
 	{
 		bool state = true;
 
-		for (int j = 0; j < 4; j++) // ÁÂÇ¥ ºñ±³
+		for (int j = 0; j < 4; j++) // ì¢Œí‘œ ë¹„êµ
 		{
 			int nx = x + dx[i][j];
 			int ny = y + dy[i][j];
@@ -47,7 +49,7 @@ int check(int x, int y, vector<vector<int>> board)
 			}
 		}
 
-		if (state == true) // ÇØ´çÇÏ´Â °æ¿ì
+		if (state == true) // í•´ë‹¹í•˜ëŠ” ê²½ìš°
 		{
 			bool state2 = true;
 
@@ -56,13 +58,13 @@ int check(int x, int y, vector<vector<int>> board)
 				int nx = x + dx[i][j];
 				int ny = y + dy[i][j];
 
-				if ((nx < 0 || ny < 0 || nx >= N || ny >= N) || board[nx][ny] != 0)
+				if (board[nx][ny] != 0)
 				{
 					state2 = false;
 					break;
 				}
 
-				for (int k = nx; k >= 0; k--) // ÇØ´çÁÂÇ¥±îÁö °¡·Î¸·´Â µµÇü ÀÖ´ÂÁö check
+				for (int k = nx; k >= 0; k--) // í•´ë‹¹ì¢Œí‘œê¹Œì§€ ê°€ë¡œë§‰ëŠ” ë„í˜• ìˆëŠ”ì§€ check
 				{
 					if (board[k][ny] != 0)
 					{
@@ -80,12 +82,12 @@ int check(int x, int y, vector<vector<int>> board)
 	return -1;
 }
 
-void removeBoard(int x, int y, int Idx, vector<vector<int>>& board)
+void removeBoard(int x, int y, int idx, vector<vector<int>> &board)
 {
 	for (int i = 0; i < 4; i++)
 	{
-		int nx = x + dx[Idx][i];
-		int ny = y + dy[Idx][i];
+		int nx = x + dx[idx][i];
+		int ny = y + dy[idx][i];
 
 		board[nx][ny] = 0;
 	}
