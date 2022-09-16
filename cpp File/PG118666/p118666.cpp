@@ -1,53 +1,55 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <iostream>
 
 using namespace std;
 
-int arr[4];
-
 unordered_map<char, int> umap;
+int result[5];
 
 string solution(vector<string> survey, vector<int> choices)
 {
     string answer = "";
     
-    umap['R'] = 0;
-    umap['T'] = 0;
+    umap['R'] = 1;
+    umap['T'] = 1;
     
-    umap['C'] = 1;
-    umap['F'] = 1;
+    umap['C'] = 2;
+    umap['F'] = 2;
     
-    umap['J'] = 2;
-    umap['M'] = 2;
+    umap['J'] = 3;
+    umap['M'] = 3;
     
-    umap['A'] = 3;
-    umap['N'] = 3;
+    umap['A'] = 4;
+    umap['N'] = 4;
     
-    for (int i = 0; i < survey.size(); i++)
+    int sz = survey.size();
+    
+    for (int i = 0; i < sz; i++)
     {
         char A = survey[i][0];
         char B = survey[i][1];
         
         int idx = umap[A];
-        int score = choices[i];
+        int score = choices[i] - 4;
         
-        if (score == 4) continue;
+        if (A > B) score *= -1;
+        // else if (A < B) { // do nothing... }
         
-        if (A < B) arr[idx] += (score - 4);
-        else arr[idx] += (4 - score);
+        result[idx] += score;
     }
     
-    if (arr[0] <= 0) answer += "R";
+    if (result[1] <= 0) answer += "R";
     else answer += "T";
     
-    if (arr[1] <= 0) answer += "C";
+    if (result[2] <= 0) answer += "C";
     else answer += "F";
     
-    if (arr[2] <= 0) answer += "J";
+    if (result[3] <= 0) answer += "J";
     else answer += "M";
     
-    if (arr[3] <= 0) answer += "A";
+    if (result[4] <= 0) answer += "A";
     else answer += "N";
     
     return answer;
