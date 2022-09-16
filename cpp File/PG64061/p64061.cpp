@@ -11,14 +11,14 @@ int solution(vector<vector<int>> board, vector<int> moves)
 {
     int answer = 0;
     
-    for (int i = 0; i < board.size(); i++)
+    int sz = board.size();
+    
+    for (int i = 0; i < sz; i++)
     {
-        for (int j = board.size() - 1; j >= 0; j--)
+        for (int j = sz - 1; j >= 0; j--)
         {
-            if (board[j][i] != 0)
-            {
-                lane[i + 1].push(board[j][i]);
-            }
+            if (board[j][i] != 0) lane[i + 1].push(board[j][i]);
+            else break;
         }
     }
     
@@ -31,15 +31,12 @@ int solution(vector<vector<int>> board, vector<int> moves)
             int num = lane[idx].top();
             lane[idx].pop();
             
-            if (!basket.empty() && basket.top() == num)
+            if (!basket.empty() && num == basket.top())
             {
                 answer += 2;
                 basket.pop();
             }
-            else
-            {
-                basket.push(num);
-            }
+            else basket.push(num);
         }
     }
     
