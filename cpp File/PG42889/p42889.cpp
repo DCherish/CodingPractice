@@ -6,56 +6,59 @@ using namespace std;
 
 struct info
 {
-	int num;
-	double rate;
+    double rate;
+    int idx;
 };
 
-int ing_cnt[510];
-int all_cnt[510];
+int iarr[510];
+int carr[510];
 
 vector<info> vec;
 
 bool cmp(info a, info b)
 {
-	if (a.rate == b.rate)
-	{
-		return a.num < b.num;
-	}
-	else return a.rate > b.rate;
+    if (a.rate == b.rate)
+    {
+        return a.idx < b.idx;
+    }
+    else return a.rate > b.rate;
 }
 
 vector<int> solution(int N, vector<int> stages)
 {
-	vector<int> answer;
-
-	info temp;
-
-	for (int i = 0; i < stages.size(); i++)
-	{
-		for (int j = 1; j <= stages[i]; j++)
-		{
-			all_cnt[j]++;
-		}
-
-		ing_cnt[stages[i]]++;
-	}
-
-	for (int i = 1; i <= N; i++)
-	{
-		temp.num = i;
-
-		if (all_cnt[i] == 0) temp.rate = 0;
-		else temp.rate = (double)ing_cnt[i] / (double)all_cnt[i];
-
-		vec.push_back(temp);
-	}
-
-	sort(vec.begin(), vec.end(), cmp);
-
-	for (int i = 0; i < vec.size(); i++)
-	{
-		answer.push_back(vec[i].num);
-	}
-
-	return answer;
+    vector<int> answer;
+    
+    for (int i = 0; i < stages.size(); i++)
+    {
+        int num = stages[i];
+        
+        iarr[num]++;
+        
+        carr[1]++;
+        carr[num + 1]--;
+    }
+    
+    for (int i = 2; i <= N; i++)
+    {
+        carr[i] += carr[i - 1];
+    }
+    
+    for (int i = 1; i <= N; i++)
+    {
+        double temp;
+        
+        if (carr[i] == 0) temp = 0;
+        else temp = (double)iarr[i] / (double)carr[i];
+        
+        vec.push_back({ temp, i });
+    }
+    
+    sort(vec.begin(), vec.end(), cmp);
+    
+    for (int i = 0; i < vec.size(); i++)
+    {
+        answer.push_back(vec[i].idx);
+    }
+    
+    return answer;
 }
