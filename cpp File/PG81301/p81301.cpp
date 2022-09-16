@@ -77,11 +77,7 @@ int solution(string s)
 		}
 	}
 
-	for (int i = 0; i < str.length(); i++)
-	{
-		answer *= 10;
-		answer += (int)(str[i] - '0');
-	}
+	answer = stoi(str);
 
 	return answer;
 }
