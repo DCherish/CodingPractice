@@ -8,7 +8,7 @@ using namespace std;
 
 unordered_map<int, int> umap;
 
-bool cmp(pair<int, int> &a, pair<int, int> &b)
+bool cmp(pair<int, int> a, pair<int, int> b)
 {
     return a.second > b.second;
 }
@@ -24,22 +24,13 @@ vector<int> solution(string s)
     {
         if (token == "") break;
         
-        string str = "";
+        stringstream ss2(token.substr(2));
+        string token2;
         
-        for (int i = 2; i < token.length(); i++)
+        while (getline(ss2, token2, ','))
         {
-            if (token[i] >= '0' && token[i] <= '9')
-            {
-                str += token[i];
-            }
-            else
-            {
-                umap[stoi(str)] += 1;
-                str = "";
-            }
+            umap[stoi(token2)] += 1;
         }
-        
-        umap[stoi(str)] += 1;
     }
     
     vector<pair<int, int>> vec(umap.begin(), umap.end());
