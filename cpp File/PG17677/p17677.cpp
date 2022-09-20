@@ -1,7 +1,6 @@
 #include <string>
 #include <cctype>
 #include <unordered_map>
-#include <vector>
 #include <algorithm>
 
 using namespace std;
@@ -9,21 +8,29 @@ using namespace std;
 unordered_map<string, int> umap1;
 unordered_map<string, int> umap2;
 
+bool isValid(char c)
+{
+    if (c >= 'a' && c <= 'z') return true;
+    else if (c >= 'A' && c <= 'Z') return true;
+    
+    return false;
+}
+
 int solution(string str1, string str2)
 {
     int answer = 0;
     
+    int mincnt = 0;
+    int maxcnt = 0;
+    
     for (int i = 0; i < str1.length() - 1; i++)
     {
-        char a = toupper(str1[i]);
-        char b = toupper(str1[i + 1]);
+        string str = "";
         
-        if (a >= 'A' && a <= 'Z' && b >= 'A' && b <= 'Z')
+        if (isValid(str1[i]) && isValid(str1[i + 1]))
         {
-            string str = "";
-            
-            str += a;
-            str += b;
+            str += toupper(str1[i]);
+            str += toupper(str1[i + 1]);
             
             umap1[str] += 1;
         }
@@ -31,22 +38,16 @@ int solution(string str1, string str2)
     
     for (int i = 0; i < str2.length() - 1; i++)
     {
-        char a = toupper(str2[i]);
-        char b = toupper(str2[i + 1]);
+        string str = "";
         
-        if (a >= 'A' && a <= 'Z' && b >= 'A' && b <= 'Z')
+        if (isValid(str2[i]) && isValid(str2[i + 1]))
         {
-            string str = "";
-            
-            str += a;
-            str += b;
+            str += toupper(str2[i]);
+            str += toupper(str2[i + 1]);
             
             umap2[str] += 1;
         }
     }
-    
-    int mincnt = 0;
-    int maxcnt = 0;
     
     for (auto a : umap1)
     {
