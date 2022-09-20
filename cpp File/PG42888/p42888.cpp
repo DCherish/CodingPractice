@@ -7,7 +7,7 @@ using namespace std;
 
 struct info
 {
-    int state;
+    bool state;
     string id;
 };
 
@@ -35,11 +35,11 @@ vector<string> solution(vector<string> record)
         {
             umap[temp[1]] = temp[2];
             
-            vec.push_back({0, temp[1]});
+            vec.push_back({ true, temp[1] });
         }
         else if (temp[0] == "Leave")
         {
-            vec.push_back({1, temp[1]});
+            vec.push_back({ false, temp[1] });
         }
         else
         {
@@ -51,14 +51,8 @@ vector<string> solution(vector<string> record)
     {
         string str = umap[vec[i].id];
         
-        if (vec[i].state == 0)
-        {
-            str += "님이 들어왔습니다.";
-        }
-        else
-        {
-            str += "님이 나갔습니다.";
-        }
+        if (vec[i].state) str += "님이 들어왔습니다.";
+        else str += "님이 나갔습니다.";
         
         answer.push_back(str);
     }
