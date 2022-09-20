@@ -63,6 +63,4 @@ string solution(int n, int t, int m, int p)
         
         num++;
     }
-    
-    return answer;
 }
