@@ -10,13 +10,13 @@ int idx;
 
 void init()
 {
-	for (int i = 1; i <= 26; i++)
+	for (int i = 0; i < 26; i++)
 	{
 		string str = "";
 
-		str += (char)('A' + i - 1);
+		str += (char)('A' + i);
 
-		alpha[str] = i;
+		alpha[str] = i + 1;
 	}
 
 	idx = 27;
