@@ -6,8 +6,6 @@
 using namespace std;
 typedef long long ll;
 
-string s[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-
 bool isprime(ll num)
 {
     if (num <= 1) return false;
@@ -22,7 +20,7 @@ bool isprime(ll num)
 
 string cnvert(int n, int k)
 {
-    if (n < k) return s[n];
+    if (n < k) return to_string(n);
     
     int front = n / k;
     int back = n % k;
