@@ -5,38 +5,44 @@
 
 using namespace std;
 
-vector<char> vec;
-
 unordered_map<string, int> umap;
-int maxcnt = 0;
+int maxcost = 0;
 
-void solve(string str, int N, int depth, int idx)
+string cnvert(string s)
 {
-    if (depth == N)
+    string result = "";
+    
+    vector<char> temp;
+    
+    for (int i = 0; i < s.length(); i++)
     {
-        vector<char> temp = vec;
+        temp.push_back(s[i]);
+    }
+    
+    sort(temp.begin(), temp.end());
+    
+    for (int i = 0; i < temp.size(); i++)
+    {
+        result += temp[i];
+    }
+    
+    return result;
+}
+
+void solve(int len, int depth, int idx, string str, string order)
+{
+    if (len == depth)
+    {
+        umap[str] += 1;
         
-        sort(temp.begin(), temp.end());
-        
-        string s = "";
-        
-        for (int i = 0; i < temp.size(); i++)
-        {
-            s += temp[i];
-        }
-        
-        umap[s] += 1;
-        
-        maxcnt = max(maxcnt, umap[s]);
+        maxcost = max(maxcost, umap[str]);
         
         return;
     }
     
-    for (int i = idx; i < str.length(); i++)
+    for (int i = idx; i < order.length(); i++)
     {
-        vec.push_back(str[i]);
-        solve(str, N, depth + 1, i + 1);
-        vec.pop_back();
+        solve(len, depth + 1, i + 1, str + order[i], order);
     }
 }
 
@@ -46,22 +52,25 @@ vector<string> solution(vector<string> orders, vector<int> course)
     
     for (int i = 0; i < course.size(); i++)
     {
+        int len = course[i];
+        
         umap.clear();
-        maxcnt = 0;
+        maxcost = 0;
         
         for (int j = 0; j < orders.size(); j++)
         {
-            solve(orders[j], course[i], 0, 0);
+            string order = orders[j];
+            
+            if (len > order.length()) continue;
+            
+            solve(len, 0, 0, "", cnvert(order));
         }
         
-        if (maxcnt == 1) continue;
+        if (maxcost <= 1) continue;
         
         for (auto a : umap)
         {
-            if (a.second == maxcnt)
-            {
-                answer.push_back(a.first);
-            }
+            if (a.second == maxcost) answer.push_back(a.first);
         }
     }
     
