@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
-#include <algorithm>
 #include <cctype>
+#include <algorithm>
 
 using namespace std;
 
@@ -35,34 +35,25 @@ vector<string> solution(vector<string> files)
     {
         string file = files[i];
         
+        int idx = 0;
+        
         string head = "";
         string num = "";
         
-        int idx = 0;
-        
-        for (int j = idx; j < file.length(); j++)
+        for (int j = 0; j < file.length(); j++)
         {
             if (file[j] >= '0' && file[j] <= '9')
             {
                 idx = j;
                 break;
             }
-            else
-            {
-                head += tolower(file[j]);
-            }
+            else head += tolower(file[j]);
         }
         
         for (int j = idx; j < file.length(); j++)
         {
-            if (file[j] >= '0' && file[j] <= '9')
-            {
-                num += file[j];
-            }
-            else
-            {
-                break;
-            }
+            if (file[j] >= '0' && file[j] <= '9') num += file[j];
+            else break;
         }
         
         vec.push_back({ head, stoi(num), i });
