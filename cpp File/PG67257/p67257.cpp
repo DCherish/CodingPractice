@@ -1,7 +1,6 @@
 #include <string>
 #include <vector>
 #include <deque>
-#include <algorithm>
 #include <cmath>
 
 using namespace std;
@@ -10,54 +9,49 @@ typedef long long ll;
 bool op[3];
 int cnt = 0;
 
-bool visited[3];
-
-vector<int> opvec;
-
 deque<ll> DQ;
+
+bool visited[3];
+vector<ll> opvec;
 
 ll answer = 0;
 
-ll cal()
-{
-    deque<ll> DQ_copy = DQ;
-    
-    for (int i = 0; i < cnt; i++)
-    {
-        int j = 1;
-        
-        while (j < DQ_copy.size())
-        {
-            if (DQ_copy[j] == opvec[i])
-            {
-                if (opvec[i] == 0)
-                {
-                    DQ_copy[j - 1] += DQ_copy[j + 1];
-                    DQ_copy.erase(DQ_copy.begin() + j, DQ_copy.begin() + j + 2);
-                }
-                else if (opvec[i] == 1)
-                {
-                    DQ_copy[j - 1] -= DQ_copy[j + 1];
-                    DQ_copy.erase(DQ_copy.begin() + j, DQ_copy.begin() + j + 2);
-                }
-                else
-                {
-                    DQ_copy[j - 1] *= DQ_copy[j + 1];
-                    DQ_copy.erase(DQ_copy.begin() + j, DQ_copy.begin() + j + 2);
-                }
-            }
-            else j += 2;
-        }
-    }
-    
-    return abs(DQ_copy.front());
-}
-
 void solve(int depth)
 {
-    if (cnt == depth)
+    if (depth == cnt)
     {
-        answer = max(answer, cal());
+        deque<ll> DQ_temp = DQ;
+        
+        for (int i = 0; i < cnt; i++)
+        {
+            int idx = 1;    
+            
+            while (idx < DQ_temp.size())
+            {
+                if (DQ_temp[idx] == opvec[i])
+                {
+                    if (opvec[i] == 0)
+                    {
+                        DQ_temp[idx - 1] += DQ_temp[idx + 1];
+                        DQ_temp.erase(DQ_temp.begin() + idx, DQ_temp.begin() + idx + 2);
+                    }
+                    else if (opvec[i] == 1)
+                    {
+                        DQ_temp[idx - 1] -= DQ_temp[idx + 1];
+                        DQ_temp.erase(DQ_temp.begin() + idx, DQ_temp.begin() + idx + 2);
+                    }
+                    else if (opvec[i] == 2)
+                    {
+                        DQ_temp[idx - 1] *= DQ_temp[idx + 1];
+                        DQ_temp.erase(DQ_temp.begin() + idx, DQ_temp.begin() + idx + 2);
+                    }
+                }
+                else idx += 2;
+            }
+        }
+        
+        answer = max(answer, abs(DQ_temp[0]));
+        
         return;
     }
     
@@ -67,7 +61,7 @@ void solve(int depth)
         if (visited[i]) continue;
         
         visited[i] = true;
-        opvec.push_back(i);
+        opvec.push_back((ll)i);
         
         solve(depth + 1);
         
@@ -76,49 +70,43 @@ void solve(int depth)
     }
 }
 
+void func(ll idx, string s)
+{
+    op[idx] = true;
+    
+    DQ.push_back(stoll(s));
+    DQ.push_back(idx);
+}
+
 ll solution(string expression)
 {
-    for (int i = 0; i < expression.length();)
+    int idx = 0;
+    
+    string str = "";
+    
+    while (idx < expression.length())
     {
-        if (expression[i] == '+')
-        {
-            op[0] = true;
-            DQ.push_back(0);
-            i++;
-        }
-        else if (expression[i] == '-')
-        {
-            op[1] = true;
-            DQ.push_back(1);
-            i++;
-        }
-        else if (expression[i] == '*')
-        {
-            op[2] = true;
-            DQ.push_back(2);
-            i++;
-        }
+        if (expression[idx] == '+') func(0, str);
+        else if (expression[idx] == '-') func(1, str);
+        else if (expression[idx] == '*') func(2, str);
         else
         {
-            ll num = 0;
-            
-            while (expression[i] >= '0' && expression[i] <= '9')
-			{
-                num *= 10;
-                num += (ll)(expression[i] - '0');
-				i++;
-			}
-
-			DQ.push_back(num);
+            str += expression[idx++];
+            continue;
         }
+            
+        str = "";
+        idx++;
     }
-
-	for (int i = 0; i < 3; i++)
-	{
-		if (op[i]) cnt++;
-	}
-
-	solve(0);
+    
+    DQ.push_back(stoll(str));
+    
+    for (int i = 0; i < 3; i++)
+    {
+        if (op[i]) cnt++;
+    }
+    
+    solve(0);
     
     return answer;
 }
