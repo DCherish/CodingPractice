@@ -12,10 +12,13 @@ bool check(int num, vector<int> &stones, int &k)
 
 	for (int i = 0; i < stones.size(); i++)
 	{
-		if (stones[i] - num < 0) jmp += 1;
+		if (stones[i] - num < 0)
+        {
+            jmp++;
+            
+            if (jmp >= k) return false;
+        }
 		else jmp = 0;
-
-		if (jmp >= k) return false;
 	}
 
 	return true;
