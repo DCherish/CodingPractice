@@ -58,7 +58,7 @@ int BFS(vector<vector<int>> &board)
             
             if (board[nx][ny] == 1) continue;
             
-            if (dir == -1 || dir == i) nc = cost + 100;
+            if (dir == i) nc = cost + 100;
             else nc = cost + 600;
             
             if (visited[i][nx][ny] > nc)
