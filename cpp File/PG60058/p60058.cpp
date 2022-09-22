@@ -17,33 +17,24 @@ string u_func()
     
     bool state = true;
     
+    deque<char> DQ_t = DQ_u;
+    
     stack<char> S;
-    deque<char> DQ_t;
     
     while (!DQ_u.empty())
     {
         char c = DQ_u.front();
         DQ_u.pop_front();
         
-        DQ_t.push_back(c);
-        
         if (c == '(') S.push(c);
         else
         {
-            if (S.empty())
+            if (S.empty()) 
             {
-                while (!DQ_u.empty())
-                {
-                    DQ_t.push_back(DQ_u.front());
-                    DQ_u.pop_front();
-                }
-                
                 state = false;
+                break;
             }
-            else
-            {
-                S.pop();
-            }
+            else S.pop();
         }
     }
     
@@ -59,6 +50,8 @@ string u_func()
     }
     else
     {
+        DQ_u.clear();
+        
         result += '(';
         result += v_func();
         result += ')';
@@ -91,15 +84,14 @@ string v_func()
         char c = DQ_v.front();
         DQ_v.pop_front();
         
-        DQ_u.push_back(c);
-        
         if (c == '(') l_cnt++;
         else r_cnt++;
+        
+        DQ_u.push_back(c);
         
         if (l_cnt == r_cnt)
         {
             result += u_func();
-            result += v_func();
             
             l_cnt = 0;
             r_cnt = 0;
