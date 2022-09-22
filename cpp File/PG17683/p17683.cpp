@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -10,23 +11,19 @@ bool cmp(string a, string b)
 {
     for (int i = 0; i < b.length(); i++)
     {
-        int cnt = 0;
+        int j = 0;
         
-        while (true)
+        while (i + j < b.length() && a[j] == b[i + j])
         {
-            if (a[cnt] == b[i + cnt] && i + cnt < b.length())
+            j++;
+            
+            if (j == a.length())
             {
-                cnt++;
+                if (i + j == b.length()) return true;
+                if (b[i + j] != '#') return true;
                 
-                if (cnt == a.length())
-                {
-                    if (i + cnt == b.length()) return true;
-                    if (b[i + cnt] != '#') return true;
-                    
-                    break;
-                }
+                break;
             }
-            else break;
         }
     }
     
@@ -52,37 +49,40 @@ string solution(string m, vector<string> musicinfos)
         stringstream ss(musicinfos[i]);
         string token;
         
-        vector<string> temp;
+        vector<string> vec;
         
         while (getline(ss, token, ','))
         {
-            temp.push_back(token);
+            vec.push_back(token);
         }
         
-        int start = cnvert(temp[0]);
-        int end = cnvert(temp[1]);
+        int s = cnvert(vec[0]);
+        int e = cnvert(vec[1]);
+        
+        int playtime = e - s;
+        
+        string title = vec[2];
         
         string music = "";
         
+        int scnt = 0;
         int idx = 0;
-        int sharp_cnt = 0;
         
-        for (int j = 0; j < end - start + sharp_cnt; j++)
+        for (int j = 0; j < playtime + scnt; j++)
         {
-            music += temp[3][idx];
+            music += vec[3][idx];
             idx++;
             
-            if (idx == temp[3].length()) idx = 0;
-            else if (temp[3][idx] == '#') sharp_cnt++;
+            if (idx == vec[3].length()) idx = 0;
+            else if (vec[3][idx] == '#') scnt++;
         }
         
         if (cmp(m, music))
         {
-            if (end - start > maxcost)
+            if (playtime > maxcost)
             {
-                maxcost = end - start;
-                
-                answer = temp[2];
+                maxcost = playtime;
+                answer = title;
             }
         }
     }
