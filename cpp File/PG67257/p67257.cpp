@@ -61,7 +61,7 @@ void solve(int depth)
         if (visited[i]) continue;
         
         visited[i] = true;
-        opvec.push_back((ll)i);
+        opvec.push_back(i);
         
         solve(depth + 1);
         
