@@ -5,7 +5,7 @@
 
 using namespace std;
 
-vector<int> db[3][2][2][2];
+vector<int> dp[3][2][2][2];
 
 vector<int> solution(vector<string> info, vector<string> query)
 {
@@ -38,18 +38,18 @@ vector<int> solution(vector<string> info, vector<string> query)
         if (temp[3] == "chicken") d = 0;
         else if (temp[3] == "pizza") d = 1;
         
-        db[a][b][c][d].push_back(stoi(temp[4]));
+        dp[a][b][c][d].push_back(stoi(temp[4]));
     }
     
-    for (int i = 0; i < 3; i++)
+    for (int a = 0; a < 3; a++)
     {
-        for (int j = 0; j < 2; j++)
+        for (int b = 0; b < 2; b++)
         {
-            for (int k = 0; k < 2; k++)
+            for (int c = 0; c < 2; c++)
             {
-                for (int l = 0; l < 2; l++)
+                for (int d = 0; d < 2; d++)
                 {
-                    sort(db[i][j][k][l].begin(), db[i][j][k][l].end());
+                    sort(dp[a][b][c][d].begin(), dp[a][b][c][d].end());
                 }
             }
         }
@@ -69,7 +69,8 @@ vector<int> solution(vector<string> info, vector<string> query)
             temp.push_back(token);
         }
         
-        int a1, a2, b1, b2, c1, c2, d1, d2, score;
+        int a1, a2, b1, b2, c1, c2, d1, d2;
+        int score = stoi(temp[4]);
         
         if (temp[0] == "cpp")
         {
@@ -113,7 +114,7 @@ vector<int> solution(vector<string> info, vector<string> query)
             c1 = 0;
             c2 = 0;
         }
-        else if (temp[2] == "senior")   
+        else if (temp[2] == "senior")
         {
             c1 = 1;
             c2 = 1;
@@ -140,9 +141,7 @@ vector<int> solution(vector<string> info, vector<string> query)
             d2 = 1;
         }
         
-        score = stoi(temp[4]);
-        
-        int cnt = 0;
+        int result = 0;
         
         for (int a = a1; a <= a2; a++)
         {
@@ -152,18 +151,17 @@ vector<int> solution(vector<string> info, vector<string> query)
                 {
                     for (int d = d1; d <= d2; d++)
                     {
-                        int n = db[a][b][c][d].size();
+                        int sz = dp[a][b][c][d].size();
                         
-                        if (n == 0) continue;
+                        if (sz == 0) continue;
                         
-                        if (lower_bound(db[a][b][c][d].begin(), db[a][b][c][d].end(), score) == db[a][b][c][d].end()) continue;
-                        else cnt += n - (lower_bound(db[a][b][c][d].begin(), db[a][b][c][d].end(), score) - db[a][b][c][d].begin());
+                        result += (sz - (lower_bound(dp[a][b][c][d].begin(), dp[a][b][c][d].end(), score) - dp[a][b][c][d].begin()));
                     }
                 }
             }
         }
         
-        answer.push_back(cnt);
+        answer.push_back(result);
     }
     
     return answer;
