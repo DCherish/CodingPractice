@@ -1,11 +1,13 @@
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
-vector<int> score(11);
 vector<int> r_info(11);
-vector<int> a_info;
+vector<int> a_info(11);
+
+vector<int> answer;
 
 int maxcost = 0;
 
@@ -16,18 +18,12 @@ void solve(int depth, int idx)
         int r_score = 0;
         int a_score = 0;
         
-        for (int i = 0; i <= 10; i++)
+        for (int i = 0; i < 11; i++)
         {
-            if (a_info[i] == 0 && r_info[i] == 0) continue;
+            if (r_info[i] == 0 && a_info[i] == 0) continue;
             
-            if (a_info[i] < r_info[i])
-            {
-                r_score += (10 - i);
-            }
-            else
-            {
-                a_score += (10 - i);
-            }
+            if (r_info[i] > a_info[i]) r_score += (10 - i);
+            else a_score += (10 - i);
         }
         
         if (a_score >= r_score) return;
@@ -36,47 +32,48 @@ void solve(int depth, int idx)
         {
             maxcost = r_score - a_score;
             
-            score = r_info;
+            answer.clear();
+            
+            for (int i = 0; i < 11; i++)
+            {
+                answer.push_back(r_info[i]);
+            }
         }
         else if (r_score - a_score == maxcost)
         {
             for (int i = 10; i >= 0; i--)
             {
-                if (score[i] == r_info[i]) continue;
-                else if (score[i] < r_info[i]) break;
-                else return;
+                if (answer[i] > r_info[i]) return;
+                else if (answer[i] < r_info[i]) break;
+                else continue;
             }
             
-            score = r_info;
+            answer.clear();
+            
+            for (int i = 0; i < 11; i++)
+            {
+                answer.push_back(r_info[i]);
+            }
         }
         
         return;
     }
     
-    for (int i = idx; i <= 10; i++)
+    for (int i = idx; i < 11; i++)
     {
-        r_info[i]++;
+        r_info[i] += 1;
         solve(depth - 1, i);
-        r_info[i]--;
+        r_info[i] -= 1;
     }
 }
 
 vector<int> solution(int n, vector<int> info)
 {
-    vector<int> answer;
+    answer.push_back(-1);
     
     a_info = info;
     
     solve(n, 0);
-    
-    if (maxcost == 0) answer.push_back(-1);
-    else
-    {
-        for (int i = 0; i < score.size(); i++)
-        {
-            answer.push_back(score[i]);
-        }
-    }
     
     return answer;
 }
