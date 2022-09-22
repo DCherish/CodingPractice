@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <deque>
+#include <algorithm>
 
 using namespace std;
 typedef long long ll;
