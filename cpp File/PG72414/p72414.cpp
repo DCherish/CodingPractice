@@ -74,7 +74,8 @@ string solution(string play_time, string adv_time, vector<string> logs)
 		timeline[i] += timeline[i - 1];
 	}
 
-	ll result = timeline[at];
+    // 0 - at초
+	ll result = timeline[at - 1];
 	int result_idx = 0;
 
 	for (int i = at; i <= pt; i++)
