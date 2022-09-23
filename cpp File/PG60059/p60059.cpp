@@ -40,9 +40,9 @@ bool check(int x, int y, vector<vector<int>> board)
         }
     }
     
-    for (int i = keysz - 1; i < boardsz - keysz + 1; i++)
+    for (int i = keysz - 1; i < keysz - 1 + locksz; i++)
     {
-        for (int j = keysz - 1; j < boardsz - keysz + 1; j++)
+        for (int j = keysz - 1; j < keysz - 1 + locksz; j++)
         {
             if (board[i][j] != 1) return false;
         }
