@@ -1,18 +1,31 @@
 #include <string>
 #include <vector>
-#include <sstream>
 #include <algorithm>
 
 using namespace std;
 
 vector<int> vec;
 
+string rvs_cnvert(int num)
+{
+    string result = "";
+    
+    if (num / 60 < 10) result += "0";
+    result += to_string(num / 60);
+    
+    result += ":";
+    
+    if (num % 60 < 10) result += "0";
+    result += to_string(num % 60);
+    
+    return result;
+}
+
 int cnvert(string s)
 {
 	int result = 0;
 
 	result += stoi(s.substr(0, 2)) * 60;
-
 	result += stoi(s.substr(3, 2));
 
 	return result;
@@ -61,16 +74,7 @@ string solution(int n, int t, int m, vector<string> timetable)
 		min_time += t;
 	}
 
-	int hr = f_time / 60;
-	int mt = f_time % 60;
-
-	if (hr < 10) answer += ("0" + to_string(hr));
-	else answer += to_string(hr);
-
-	answer += ":";
-
-	if (mt < 10) answer += ("0" + to_string(mt));
-	else answer += to_string(mt);
+	answer = rvs_cnvert(f_time);
 
 	return answer;
 }
