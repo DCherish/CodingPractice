@@ -49,19 +49,19 @@ pair<bool, int> solve(vector<vector<int>> &board, int x1, int y1, int x2, int y2
         
         board[x1][y1] = 1;
         
-        if (!res.first)
+        if (!res.first) // 상대방이 졌다면
         {
-            state = true;
+            state = true; // 내가 무조건 이겼다고 표시
             minCost = min(minCost, res.second);
         }
-        else if (!state)
+        else if (!state) // 내가 아직 이겼는지 모르는 상태라면
         {
             maxCost = max(maxCost, res.second);
         }
     }
     
-    if (state) return { state, minCost + 1 };
-    else return { state, maxCost + 1 };
+    if (state) return { state, minCost + 1 }; // 내가 이겼다면
+    else return { state, maxCost + 1 }; // 내가 이기지 못했다면
 }
 
 int solution(vector<vector<int>> board, vector<int> aloc, vector<int> bloc)
