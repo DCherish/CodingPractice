@@ -13,11 +13,12 @@ vector<int> cost;
 void DFS(int idx)
 {
 	bool leaf = true;
+    
+    if (Node[idx].size() != 0) leaf = false;
 
 	for (int i = 0; i < Node[idx].size(); i++)
 	{
 		int child = Node[idx][i];
-		leaf = false;
 		DFS(child);
 	}
 
