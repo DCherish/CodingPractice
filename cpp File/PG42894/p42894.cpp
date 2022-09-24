@@ -11,7 +11,7 @@ void pre_setting()
     // [x][y] = num
 	// x ; 5 figure only can fill with black // 0 1 2 3 4
 	// y ; 0 1 2 3 ; color pnt // 4 5 ; black pnt
-    // num ; x or y plus num
+    // num ; x or y plus num (from [0, 0])
 
 	dx[0][0] = 0; dx[0][1] = 1; dx[0][2] = 1; dx[0][3] = 1; dx[0][4] = 0; dx[0][5] = 0; // ㄴㅡ
 	dy[0][0] = 0; dy[0][1] = 0; dy[0][2] = 1; dy[0][3] = 2; dy[0][4] = 1; dy[0][5] = 2; // ㄴㅡ
