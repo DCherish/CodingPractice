@@ -17,9 +17,9 @@ ll gcd(ll x, ll r)
     return r;
 }
 
-long long solution(int w, int h) 
+ll solution(int w, int h) 
 {
-    long long answer = 1;
+    ll answer = 1;
     
     ll width = (ll)w;
     ll height = (ll)h;
