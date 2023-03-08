@@ -1,30 +1,35 @@
 #include <iostream>
+#include <vector>
 #include <queue>
 
 using namespace std;
 
 int N, M, cnt;
+int u, v;
 
-int matrix[1000][1000];
-bool visited[1000];
+vector<int> node[1001];
+bool visited[1001];
 
 void BFS(int idx)
 {
 	queue<int> Q;
 
+    visited[idx] = true;
 	Q.push(idx);
 
 	while (!Q.empty())
 	{
-		int visit = Q.front();
+		int num = Q.front();
 		Q.pop();
 
-		for (int k = 0; k < N; k++)
+        int sz = node[num].size();
+
+		for (int k = 0; k < sz; k++)
 		{
-			if (matrix[visit][k] == 1 && visited[k] == false)
+			if (!visited[node[num][k]])
 			{
-				visited[k] = true;
-				Q.push(k);
+				visited[node[num][k]] = true;
+				Q.push(node[num][k]);
 			}
 		}
 	}
@@ -36,24 +41,20 @@ int main()
 	cin.tie(0);
 	cout.tie(0);
 
-	int u = 0;
-	int v = 0;
-
 	cin >> N >> M;
 
 	for (int i = 0; i < M; i++)
 	{
 		cin >> u >> v;
 
-		matrix[u - 1][v - 1] = 1;
-		matrix[v - 1][u - 1] = 1;
+		node[u].push_back(v);
+		node[v].push_back(u);
 	}
 
-	for (int i = 0; i < N; i++)
+	for (int i = 1; i <= N; i++)
 	{
 		if (!visited[i])
 		{
-			visited[i] = true;
 			BFS(i);
 			cnt++;
 		}
